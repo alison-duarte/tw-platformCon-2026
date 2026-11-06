@@ -1,0 +1,46 @@
+.feedback { display: grid; gap: 1.1rem; }
+.banner { display: flex; gap: 1rem; align-items: center; padding: 1rem 1.1rem; border-radius: 14px; border: 1px solid; }
+.banner--ok { background: rgba(0,163,137,.15); border-color: rgba(0,163,137,.5); }
+.banner--bad { background: rgba(242,97,122,.15); border-color: rgba(242,97,122,.5); }
+.banner--late { background: rgba(243,167,18,.15); border-color: rgba(243,167,18,.5); }
+.banner__icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; font-size: 1.3rem; background: rgba(255,255,255,.08); }
+.banner__title { font: 700 1.1rem var(--font-head); }
+.banner__points, .banner__streak { font-size: .9rem; font-weight: 600; opacity: .9; margin-top: .15rem; }
+.answers { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+.answer { min-height: 56px; }
+.answer--idle { opacity: .55; }
+.answer--right { border-color: var(--tw-jade); background: rgba(0,163,137,.15); }
+.answer--wrong { border-color: var(--tw-flamingo); background: rgba(242,97,122,.15); }
+.insight { padding: 1rem 1.1rem; border-radius: 14px; background: rgba(0,61,76,.6); border-left: 4px solid var(--tw-flamingo); display: grid; gap: .4rem; }
+.insight__text { line-height: 1.55; color: rgba(226,232,240,.92); }
+
+/* Pop-up effect: animated check, cross or clock. Never blocks taps. */
+.pop { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; pointer-events: none; animation: pop-fade 1.4s ease forwards; }
+.pop__badge {
+  width: min(40vmin, 260px); aspect-ratio: 1; display: grid; place-items: center;
+  border-radius: 50%; border: 6px solid currentColor; background: rgba(15, 23, 42, .9);
+  animation: pop-in .45s cubic-bezier(.2, 1.5, .4, 1) both;
+}
+.pop--ok { color: var(--tw-jade); }
+.pop--bad { color: var(--tw-flamingo); }
+.pop--late { color: var(--tw-turmeric); }
+.pop--ok .pop__badge { box-shadow: 0 0 90px rgba(0, 163, 137, .55); }
+.pop--bad .pop__badge { box-shadow: 0 0 90px rgba(242, 97, 122, .55); }
+.pop--late .pop__badge { box-shadow: 0 0 90px rgba(243, 167, 18, .5); }
+.pop svg { width: 68%; height: 68%; fill: none; stroke: currentColor; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.pop__ring { stroke-dasharray: 151; stroke-dashoffset: 151; animation: pop-draw .5s .05s ease forwards; }
+.pop__mark { stroke-dasharray: 60; stroke-dashoffset: 60; animation: pop-draw .35s .4s ease forwards; }
+
+.feedback--ok { animation: card-bump .4s ease; }
+.feedback--bad { animation: card-shake .45s ease; }
+
+@keyframes pop-in { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes pop-fade { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes pop-draw { to { stroke-dashoffset: 0; } }
+@keyframes card-bump { 50% { transform: scale(1.015); } }
+@keyframes card-shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+
+/* Base CSS disables animations for reduced motion: keep the icon visible, static. */
+@media (prefers-reduced-motion: reduce) {
+  .pop__ring, .pop__mark { stroke-dashoffset: 0; }
+}

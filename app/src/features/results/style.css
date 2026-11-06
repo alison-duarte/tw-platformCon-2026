@@ -1,0 +1,9 @@
+.results { display: grid; gap: 1.25rem; }
+.callout { padding: 1rem 1.25rem; border-radius: 14px; text-align: center; font: 700 1.15rem var(--font-head); color: var(--tw-turmeric); background: rgba(243,167,18,.12); border: 1px dashed var(--tw-turmeric); }
+.warning { padding: .8rem 1rem; border-radius: 12px; background: rgba(242,97,122,.15); border: 1px solid var(--tw-flamingo); }
+.actions { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: space-between; }
+.review__item { display: grid; gap: .4rem; padding: 1rem; border-radius: 14px; background: rgba(15,23,42,.6); border: 1px solid var(--tw-border); }
+.review__verdict { font-size: .8rem; font-weight: 700; }
+.review__verdict--ok { color: var(--tw-jade); }
+.review__verdict--bad { color: var(--tw-flamingo); }
+.review__answer { font-weight: 600; }

@@ -1,0 +1,21 @@
+:root {
+  /* Thoughtworks palette */
+  --tw-flamingo: #F2617A;
+  --tw-flamingo-hover: #E04863;
+  --tw-wave: #003D4C;
+  --tw-wave-light: #008489;
+  --tw-onyx: #0F172A;
+  --tw-surface: #1E293B;
+  --tw-border: #334155;
+  --tw-mist: #E2E8F0;
+  --tw-talc: #F8FAFC;
+  --tw-turmeric: #F3A712;
+  --tw-jade: #00A389;
+
+  --font-head: 'Bitter', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius: 16px;
+  --tap: 48px;
+  --space: 1rem;
+}

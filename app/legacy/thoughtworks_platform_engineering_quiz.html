@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thoughtworks | Platform & AI Engineering Challenge</title>
+
+  <!-- Google Fonts: Bitter (headlines) & Inter (body & subheadings) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- Tone.js for Sound Effects -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind Configuration for Thoughtworks Design System Palette -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            tw: {
+              onyx: '#0F172A',       // Onyx dark background
+              darkSurface: '#1E293B',
+              borderDark: '#334155',
+              talc: '#F8FAFC',       // Talc white
+              mist: '#E2E8F0',       // Mist grey
+              wave: '#003D4C',       // Wave blue (TW deep signature)
+              waveLight: '#008489',  // Wave blue lighter tint
+              pink: '#F2617A',       // Flamingo pink
+              pinkHover: '#E04863',
+              yellow: '#F3A712',     // Turmeric yellow
+              jade: '#00A389',       // Jade green
+              sapphire: '#0B69A3',   // Sapphire blue
+              amethyst: '#7E57C2'    // Amethyst purple
+            }
+          },
+          fontFamily: {
+            bitter: ['Bitter', 'serif'],
+            inter: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b1120;
+      color: #F8FAFC;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    h1, h2, h3, .tw-headline {
+      font-family: 'Bitter', serif;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+
+    /* Subtle Animated Background Grid */
+    .tw-grid-bg {
+      background-size: 36px 36px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    }
+
+    /* Glow highlights */
+    .glow-wave {
+      box-shadow: 0 0 35px -5px rgba(0, 163, 137, 0.35);
+    }
+    .glow-pink {
+      box-shadow: 0 0 30px -5px rgba(242, 97, 122, 0.4);
+    }
+
+    /* Custom progress bar transition */
+    .progress-transition {
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Pulse animation for timer urgency */
+    @keyframes pulse-urgent {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .urgent-timer {
+      animation: pulse-urgent 0.8s infinite;
+    }
+
+    /* iPad touch optimization */
+    button, input, label {
+      touch-action: manipulation;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen tw-grid-bg flex flex-col justify-between selection:bg-tw-pink selection:text-white">
+
+  <!-- ================= TOP HEADER / NAVBAR ================= -->
+  <header class="w-full border-b border-tw-borderDark/60 bg-tw-onyx/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <!-- Thoughtworks Brand Logo: Flamingo pink oblique + Capitalized Thoughtworks wordmark + descriptor -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="handleLogoClick()">
+        <div class="flex items-center space-x-2 select-none">
+          <!-- Oblique Flamingo Pink -->
+          <svg class="h-6 w-3.5 fill-current text-tw-pink flex-shrink-0" viewBox="0 0 14 26" aria-hidden="true">
+            <polygon points="9,1 14,1 5,25 0,25" />
+          </svg>
+          <div class="flex flex-col">
+            <span class="text-xl sm:text-2xl font-bold tracking-tight text-white font-sans leading-none">Thoughtworks</span>
+            <span class="text-[9px] sm:text-[10px] font-medium tracking-normal text-tw-mist/80 font-sans mt-0.5">Design. Engineering. AI.</span>
+          </div>
+        </div>
+        <div class="h-5 w-px bg-tw-borderDark hidden md:block ml-1"></div>
+        <span id="nav-subtitle" class="text-xs font-semibold uppercase tracking-wider text-tw-mist/75 hidden md:inline-block">
+          Engenharia de plataforma e AI
+        </span>
+      </div>
+
+      <!-- Controls: Language Switch, iPad Badge, Staff Admin & Sound -->
+      <div class="flex items-center space-x-2">
+        <!-- iPad Badge Indicator -->
+        <div id="badge-ipad" class="hidden sm:inline-flex items-center px-2.5 py-1.5 rounded-lg bg-tw-onyx border border-tw-borderDark text-xs font-semibold text-tw-mist/90">
+          <i data-lucide="tablet" class="w-3.5 h-3.5 mr-1.5 text-tw-yellow"></i> iPad Booth Edition
+        </div>
+
+        <!-- Bilingual Switcher Button -->
+        <button 
+          id="lang-toggle-btn" 
+          onclick="toggleLanguage()" 
+          class="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-tw-darkSurface hover:bg-slate-700/80 border border-tw-borderDark text-xs font-bold tracking-wide text-white transition active:scale-95"
+          title="Mudar idioma / Switch language">
+          <span id="lang-flag">🇧🇷</span>
+          <span id="lang-label">PT</span>
+          <span class="text-tw-mist/40">|</span>
+          <span class="text-tw-mist/70">EN</span>
+        </button>
+
+        <!-- Staff / CSV Export Button (For booth organizers) -->
+        <button 
+          id="btn-staff-panel" 
+          onclick="toggleStaffModal(true)" 
+          class="flex items-center space-x-1.5 px-2.5 py-2 rounded-lg bg-tw-onyx hover:bg-tw-darkSurface border border-tw-borderDark text-xs font-semibold text-tw-mist hover:text-white transition active:scale-95" 
+          title="Painel do Estande / Exportar CSV">
+          <i data-lucide="download" class="w-3.5 h-3.5 text-tw-yellow"></i>
+          <span class="hidden sm:inline">CSV</span>
+          <span id="staff-players-pill" class="text-[10px] bg-tw-pink/20 text-tw-pink font-bold px-1.5 py-0.2 rounded-full">0</span>
+        </button>
+
+        <button id="sound-toggle-btn" onclick="toggleAudio()" class="p-2.5 rounded-lg bg-tw-darkSurface hover:bg-slate-700/80 text-tw-mist border border-tw-borderDark transition flex items-center active:scale-95" title="Som / Sound">
+          <i id="sound-icon" data-lucide="volume-2" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <div class="w-full max-w-3xl mx-auto">
+
+      <!-- ================= 1. REGISTRATION SCREEN ================= -->
+      <section id="screen-registration" class="bg-tw-darkSurface/95 border border-tw-borderDark rounded-2xl p-6 sm:p-9 shadow-2xl backdrop-blur-sm glow-wave transition-all duration-300">
+        
+        <!-- Hero Header -->
+        <div class="text-center max-w-xl mx-auto mb-7">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tw-wave/80 border border-tw-waveLight/60 text-xs font-semibold text-teal-300 mb-3">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-tw-pink"></i>
+            <span id="txt-hero-tag">Desafio interativo no estande</span>
+          </div>
+          <!-- Bitter bold headline in sentence case -->
+          <h1 id="txt-hero-title" class="text-2xl sm:text-3xl md:text-4xl font-bitter text-white tracking-tight mb-2.5">
+            Acelere sua entrega com engenharia de plataforma
+          </h1>
+          <p id="txt-hero-desc" class="text-tw-mist/90 text-xs sm:text-sm leading-relaxed">
+            Responda 5 perguntas rápidas sobre Engenharia de plataforma e AI e retire seu brinde na mesa!
+          </p>
+        </div>
+
+        <!-- Clean Booth Notice -->
+        <div class="bg-tw-onyx/80 border border-tw-borderDark/80 rounded-xl px-4 py-3 mb-6 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-inner">
+          <div class="flex items-center space-x-2.5 text-xs text-tw-mist">
+            <div class="p-1.5 rounded-lg bg-tw-pink/15 text-tw-pink flex-shrink-0">
+              <i data-lucide="gift" class="w-4 h-4"></i>
+            </div>
+            <span id="txt-swag-table-notice" class="font-medium text-white">
+              Ao finalizar o quiz, retire um brinde na mesa
+            </span>
+          </div>
+          <div id="txt-badge-scoring" class="text-[11px] font-bold px-2.5 py-1 rounded bg-tw-yellow/15 text-tw-yellow border border-tw-yellow/30 flex-shrink-0">
+            ⚡ 25s por pergunta • Tempo × Acerto
+          </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="reg-form" onsubmit="handleRegistrationSubmit(event)" class="space-y-4" novalidate>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            
+            <!-- Full Name -->
+            <div>
+              <label for="reg-name" id="lbl-name" class="block text-xs font-semibold uppercase tracking-wider text-tw-mist/90 mb-1">
+                Nome completo <span class="text-tw-pink">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="reg-name" 
+                required 
+                placeholder="Ex: Alex Santana"
+                class="w-full px-4 py-3 rounded-lg bg-tw-onyx border border-tw-borderDark text-white placeholder-slate-500 focus:outline-none focus:border-tw-pink focus:ring-1 focus:ring-tw-pink transition text-sm">
+              <span id="err-name" class="text-xs text-tw-pink hidden mt-1">Por favor, informe seu nome.</span>
+            </div>
+
+            <!-- Role / Title -->
+            <div>
+              <label for="reg-role" id="lbl-role" class="block text-xs font-semibold uppercase tracking-wider text-tw-mist/90 mb-1">
+                Cargo ou função <span class="text-tw-pink">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="reg-role" 
+                required 
+                placeholder="Ex: Tech Lead, Arquiteto(a), Dev"
+                class="w-full px-4 py-3 rounded-lg bg-tw-onyx border border-tw-borderDark text-white placeholder-slate-500 focus:outline-none focus:border-tw-pink focus:ring-1 focus:ring-tw-pink transition text-sm">
+              <span id="err-role" class="text-xs text-tw-pink hidden mt-1">Por favor, informe seu cargo ou função.</span>
+            </div>
+
+            <!-- Company Name -->
+            <div>
+              <label for="reg-company" id="lbl-company" class="block text-xs font-semibold uppercase tracking-wider text-tw-mist/90 mb-1">
+                Nome da empresa <span class="text-tw-pink">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="reg-company" 
+                required 
+                placeholder="Ex: Nubank, Localiza, Itaú"
+                class="w-full px-4 py-3 rounded-lg bg-tw-onyx border border-tw-borderDark text-white placeholder-slate-500 focus:outline-none focus:border-tw-pink focus:ring-1 focus:ring-tw-pink transition text-sm">
+              <span id="err-company" class="text-xs text-tw-pink hidden mt-1">Por favor, informe sua empresa.</span>
+            </div>
+
+            <!-- Email (Personal or Company) -->
+            <div>
+              <label for="reg-email" id="lbl-email" class="block text-xs font-semibold uppercase tracking-wider text-tw-mist/90 mb-1">
+                E-mail corporativo ou pessoal <span class="text-tw-pink">*</span>
+              </label>
+              <input 
+                type="email" 
+                id="reg-email" 
+                required 
+                placeholder="alex@empresa.com"
+                class="w-full px-4 py-3 rounded-lg bg-tw-onyx border border-tw-borderDark text-white placeholder-slate-500 focus:outline-none focus:border-tw-pink focus:ring-1 focus:ring-tw-pink transition text-sm">
+              <span id="err-email" class="text-xs text-tw-pink hidden mt-1">Insira um e-mail válido.</span>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="md:col-span-2">
+              <label for="reg-phone" id="lbl-phone" class="block text-xs font-semibold uppercase tracking-wider text-tw-mist/90 mb-1">
+                Telefone / WhatsApp <span class="text-tw-pink">*</span>
+              </label>
+              <input 
+                type="tel" 
+                id="reg-phone" 
+                required 
+                placeholder="(11) 98765-4321"
+                class="w-full px-4 py-3 rounded-lg bg-tw-onyx border border-tw-borderDark text-white placeholder-slate-500 focus:outline-none focus:border-tw-pink focus:ring-1 focus:ring-tw-pink transition text-sm">
+              <span id="err-phone" class="text-xs text-tw-pink hidden mt-1">Insira um telefone de contato.</span>
+            </div>
+          </div>
+
+          <!-- Consent Checkboxes -->
+          <div class="space-y-3 pt-1">
+            <!-- Mandatory Consent -->
+            <label class="flex items-start space-x-3 cursor-pointer group">
+              <input 
+                type="checkbox" 
+                id="reg-consent-share" 
+                required 
+                class="mt-1 rounded bg-tw-onyx border-tw-borderDark text-tw-pink focus:ring-tw-pink w-4 h-4 cursor-pointer">
+              <span id="lbl-consent-text" class="text-xs text-tw-mist/85 leading-normal group-hover:text-white transition">
+                <span class="font-semibold text-white">Consentimento de participação e brinde <span class="text-tw-pink">*</span>:</span> 
+                Concordo em compartilhar minhas informações com a Thoughtworks para participar do quiz e receber o brinde no estande.
+              </span>
+            </label>
+            <span id="err-consent" class="text-xs text-tw-pink hidden block">É obrigatório aceitar o compartilhamento para jogar e retirar o brinde.</span>
+
+            <!-- Newsletter Opt-in -->
+            <label class="flex items-start space-x-3 cursor-pointer group">
+              <input 
+                type="checkbox" 
+                id="reg-newsletter" 
+                class="mt-1 rounded bg-tw-onyx border-tw-borderDark text-tw-pink focus:ring-tw-pink w-4 h-4 cursor-pointer">
+              <span id="lbl-newsletter-text" class="text-xs text-tw-mist/80 leading-normal group-hover:text-white transition">
+                <span class="font-semibold text-white">Novidades e Tech Radar Thoughtworks:</span> 
+                Quero receber publicações sobre Engenharia de Plataforma, IA e o Radar Tecnológico da Thoughtworks. (Opcional)
+              </span>
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-2">
+            <button 
+              type="submit" 
+              class="w-full py-4 px-6 rounded-xl font-bold text-white bg-tw-pink hover:bg-tw-pinkHover shadow-lg glow-pink transition-all active:scale-[0.99] flex items-center justify-center space-x-2 text-base">
+              <span id="btn-start-text">Começar o desafio</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ================= 2. ACTIVE QUIZ SCREEN ================= -->
+      <section id="screen-quiz" class="hidden bg-tw-darkSurface/95 border border-tw-borderDark rounded-2xl p-5 sm:p-8 shadow-2xl backdrop-blur-md">
+        
+        <!-- Game HUD: Progress, Timer, Score & Streak -->
+        <div class="flex items-center justify-between gap-3 border-b border-tw-borderDark/80 pb-4 mb-5 flex-wrap sm:flex-nowrap">
+          
+          <!-- Question Count & Streak Indicator -->
+          <div class="flex items-center space-x-2.5">
+            <span id="quiz-progress-text" class="text-xs sm:text-sm font-bold tracking-wider uppercase text-tw-mist">
+              Pergunta 1 de 5
+            </span>
+            <div id="streak-pill" class="hidden items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+              🔥 <span id="streak-count">1</span>x Streak!
+            </div>
+          </div>
+
+          <!-- Score HUD -->
+          <div class="flex items-center space-x-1.5 bg-tw-onyx px-3 py-1.5 rounded-lg border border-tw-borderDark">
+            <i data-lucide="trophy" class="w-3.5 h-3.5 text-tw-yellow"></i>
+            <span id="lbl-total-score" class="text-[10px] uppercase font-bold text-tw-mist/60">Pontos</span>
+            <span id="hud-score" class="font-bitter font-bold text-sm sm:text-base text-tw-yellow">0</span>
+          </div>
+
+          <!-- Circular / Linear Timer Visual -->
+          <div class="flex items-center space-x-2.5">
+            <div class="text-right">
+              <span id="lbl-time-left" class="text-[10px] uppercase font-bold text-tw-mist/60 block">Tempo</span>
+              <span id="timer-text" class="font-bitter text-lg sm:text-xl font-bold text-tw-jade">25s</span>
+            </div>
+            <div class="w-9 h-9 relative flex items-center justify-center">
+              <svg class="w-9 h-9 transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-tw-onyx" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="timer-circle-path" class="text-tw-jade transition-all duration-1000 ease-linear" stroke-width="3.5" stroke-dasharray="100, 100" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-tw-mist/70 absolute"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linear Progress Indicator -->
+        <div class="w-full bg-tw-onyx rounded-full h-1.5 mb-6 overflow-hidden">
+          <div id="quiz-progress-bar" class="bg-gradient-to-r from-tw-waveLight to-tw-pink h-1.5 rounded-full progress-transition" style="width: 12.5%;"></div>
+        </div>
+
+        <!-- Question Headline (Short, Bitter bold, sentence case) -->
+        <div class="mb-6 min-h-[75px] flex flex-col justify-center">
+          <span id="question-category" class="text-xs uppercase font-bold tracking-wider text-tw-pink mb-1.5 flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Arquitetura de Plataforma
+          </span>
+          <h2 id="question-text" class="text-lg sm:text-xl md:text-2xl font-bitter text-white leading-snug">
+            Carregando pergunta...
+          </h2>
+        </div>
+
+        <!-- 4 Option Cards (Touch friendly for iPad) -->
+        <div id="options-grid" class="grid grid-cols-1 gap-3 mb-5">
+          <!-- Dynamically generated buttons -->
+        </div>
+
+        <!-- Helper Hint / Note -->
+        <div class="flex items-center justify-between text-xs text-tw-mist/60 pt-2 border-t border-tw-borderDark/40">
+          <span id="txt-speed-hint">⚡ Responda rápido para acumular mais pontos!</span>
+          <span class="flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-tw-jade"></i>
+            <span id="txt-thoughtworks-verified">Visão Thoughtworks</span>
+          </span>
+        </div>
+      </section>
+
+      <!-- ================= 3. EXPLANATION SCREEN (AFTER EACH QUESTION) ================= -->
+      <section id="screen-feedback" class="hidden bg-tw-darkSurface/95 border border-tw-borderDark rounded-2xl p-5 sm:p-8 shadow-2xl backdrop-blur-md">
+        
+        <!-- Status Banner: Correct or Missed -->
+        <div id="feedback-banner" class="flex items-center space-x-3.5 p-4 rounded-xl mb-5">
+          <div id="feedback-icon-box" class="p-2.5 rounded-xl flex-shrink-0">
+            <!-- Icon injected by JS -->
+          </div>
+          <div>
+            <h3 id="feedback-status-title" class="font-bitter text-lg sm:text-xl font-bold"></h3>
+            <p id="feedback-points-sub" class="text-xs sm:text-sm font-semibold opacity-90"></p>
+          </div>
+        </div>
+
+        <!-- Question Recap -->
+        <div class="bg-tw-onyx/75 border border-tw-borderDark/70 rounded-xl p-3.5 mb-4">
+          <span id="lbl-recap-q" class="text-[10px] font-bold uppercase tracking-wider text-tw-mist/60 block mb-1">Pergunta</span>
+          <p id="feedback-recap-question" class="text-sm font-medium text-white"></p>
+        </div>
+
+        <!-- Thoughtworks Offer Explanation Box -->
+        <div class="bg-gradient-to-br from-tw-wave/40 via-tw-darkSurface to-tw-wave/20 border-l-4 border-tw-waveLight rounded-r-xl p-4 sm:p-5 mb-6 shadow-inner">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="p-1.5 rounded-md bg-tw-waveLight/20 text-teal-300">
+              <i data-lucide="lightbulb" class="w-4 h-4"></i>
+            </div>
+            <h4 id="lbl-tw-explanation-title" class="font-semibold text-xs sm:text-sm text-teal-200 uppercase tracking-wide">
+              O que a Thoughtworks diz sobre isso
+            </h4>
+          </div>
+          <p id="feedback-explanation-text" class="text-xs sm:text-sm text-tw-mist/95 leading-relaxed">
+            <!-- Thoughtworks perspective injected here -->
+          </p>
+        </div>
+
+        <!-- Next Question Button -->
+        <div class="flex justify-end">
+          <button 
+            id="btn-next-question" 
+            onclick="handleNextQuestion()" 
+            class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-bold text-white bg-tw-pink hover:bg-tw-pinkHover shadow-lg glow-pink transition flex items-center justify-center space-x-2 text-sm sm:text-base active:scale-95">
+            <span id="next-btn-text">Próxima pergunta</span>
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 4. RESULTS & IPAD BOOTH REDEMPTION (NO QR CODE) ================= -->
+      <section id="screen-results" class="hidden bg-tw-darkSurface/95 border border-tw-borderDark rounded-2xl p-5 sm:p-8 shadow-2xl backdrop-blur-md">
+        
+        <!-- Victory Title -->
+        <div class="text-center max-w-lg mx-auto mb-6">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tw-jade/20 border border-tw-jade/50 text-xs font-semibold text-teal-300 mb-2.5">
+            <i data-lucide="award" class="w-4 h-4 text-tw-jade"></i>
+            <span id="txt-results-badge">Desafio concluído com sucesso!</span>
+          </div>
+          <h2 id="txt-results-title" class="text-2xl sm:text-3xl font-bitter text-white tracking-tight mb-2">
+            Potencialize a eficácia da sua engenharia
+          </h2>
+          <p id="txt-results-desc" class="text-xs sm:text-sm text-tw-mist/80">
+            Parabéns pela participação! Veja sua pontuação e retire seu brinde na mesa com a equipe Thoughtworks.
+          </p>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+          <div class="bg-tw-onyx border border-tw-borderDark rounded-xl p-3 text-center">
+            <span id="lbl-score-result" class="text-[10px] uppercase font-bold text-tw-mist/60 block mb-0.5">Pontos</span>
+            <span id="final-score" class="font-bitter text-xl sm:text-2xl font-extrabold text-tw-yellow">0</span>
+          </div>
+
+          <div class="bg-tw-onyx border border-tw-borderDark rounded-xl p-3 text-center">
+            <span id="lbl-accuracy-result" class="text-[10px] uppercase font-bold text-tw-mist/60 block mb-0.5">Precisão</span>
+            <span id="final-accuracy" class="font-bitter text-xl sm:text-2xl font-extrabold text-tw-jade">0%</span>
+          </div>
+
+          <div class="bg-tw-onyx border border-tw-borderDark rounded-xl p-3 text-center">
+            <span id="lbl-streak-result" class="text-[10px] uppercase font-bold text-tw-mist/60 block mb-0.5">Maior streak</span>
+            <span id="final-streak" class="font-bitter text-xl sm:text-2xl font-extrabold text-tw-pink">0</span>
+          </div>
+
+          <div class="bg-tw-onyx border border-tw-borderDark rounded-xl p-3 text-center">
+            <span id="lbl-tier-result" class="text-[10px] uppercase font-bold text-tw-mist/60 block mb-0.5">Categoria</span>
+            <span id="final-tier" class="font-bold text-xs sm:text-sm text-teal-300 block truncate mt-1">Platform Hero</span>
+          </div>
+        </div>
+
+        <!-- Attendee Confirmation Card -->
+        <div class="bg-gradient-to-br from-tw-wave/60 via-tw-onyx to-tw-darkSurface border border-tw-borderDark rounded-2xl p-5 sm:p-6 mb-6 shadow-xl relative overflow-hidden">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-5">
+            <div class="space-y-1.5 text-center md:text-left flex-grow">
+              <div class="flex items-center justify-center md:justify-start space-x-2 select-none">
+                <svg class="h-5 w-3 fill-current text-tw-pink" viewBox="0 0 14 26" aria-hidden="true">
+                  <polygon points="9,1 14,1 5,25 0,25" />
+                </svg>
+                <span class="font-bold text-lg text-white font-sans">Thoughtworks</span>
+                <span class="text-[10px] text-tw-mist/70 font-sans ml-1">Design. Engineering. AI.</span>
+              </div>
+              <h3 id="ticket-user-name" class="font-bitter text-xl sm:text-2xl text-white font-bold">Participante</h3>
+              <p id="ticket-company-role" class="text-xs text-tw-mist/85">Empresa • Cargo</p>
+            </div>
+
+            <!-- Direct iPad Booth Notice Box -->
+            <div class="flex-shrink-0 bg-tw-onyx/90 border border-tw-borderDark rounded-xl p-4 text-center max-w-xs shadow-inner">
+              <div class="w-9 h-9 mx-auto rounded-full bg-tw-pink/20 text-tw-pink flex items-center justify-center mb-2">
+                <i data-lucide="gift" class="w-4 h-4"></i>
+              </div>
+              <p id="txt-ipad-booth-callout" class="text-xs font-bold text-white leading-snug">
+                Ao finalizar o quiz, retire um brinde na mesa
+              </p>
+              <span id="txt-conf-tag" class="text-[10px] text-tw-mist/60 block mt-1">Engenharia de plataforma e AI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons (iPad friendly touch buttons) -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-1">
+          <button 
+            onclick="toggleReviewModal(true)" 
+            class="w-full sm:w-1/2 py-3.5 px-4 rounded-xl font-semibold text-white bg-tw-darkSurface hover:bg-slate-700 border border-tw-borderDark transition flex items-center justify-center space-x-2 text-xs sm:text-sm active:scale-95">
+            <i data-lucide="book-open" class="w-4 h-4 text-tw-waveLight"></i>
+            <span id="btn-review-text">Revisar as 5 respostas da Thoughtworks</span>
+          </button>
+          
+          <button 
+            onclick="resetAppForNextPlayer()" 
+            class="w-full sm:w-1/2 py-3.5 px-4 rounded-xl font-bold text-white bg-tw-pink hover:bg-tw-pinkHover shadow-md glow-pink transition flex items-center justify-center space-x-2 text-xs sm:text-sm active:scale-95">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            <span id="btn-play-again-text">Próximo participante / Novo jogo</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= STAFF / ORGANIZERS MODAL WITH CSV EXPORT & RAFFLE ================= -->
+  <div id="modal-staff" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-tw-darkSurface border border-tw-borderDark rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      
+      <!-- Staff Header -->
+      <div class="p-4 sm:p-5 border-b border-tw-borderDark flex items-center justify-between bg-tw-onyx">
+        <div class="flex items-center space-x-2.5">
+          <div class="p-2 bg-tw-pink/20 text-tw-pink rounded-lg">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bitter text-base sm:text-lg font-bold text-white">Painel da Equipe • Sorteio &amp; Leads</h3>
+            <p class="text-xs text-tw-mist/70">Gestão de participantes e exportação para sorteio</p>
+          </div>
+        </div>
+        <button onclick="toggleStaffModal(false)" class="p-2 rounded-lg text-tw-mist hover:text-white hover:bg-tw-darkSurface transition active:scale-90">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Staff Content -->
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-4">
+        <!-- Stats summary -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-tw-onyx border border-tw-borderDark rounded-xl p-3 text-center">
+            <span class="text-[10px] uppercase font-bold text-tw-mist/60 block">Total de Jogadores</span>
+            <span id="staff-total-count" class="font-bitter text-xl font-bold text-tw-jade">0</span>
+          </div>
+          <div class="bg-tw-onyx border border-tw-borderDark rounded-xl p-3 text-center">
+            <span class="text-[10px] uppercase font-bold text-tw-mist/60 block">Média de Pontos</span>
+            <span id="staff-avg-score" class="font-bitter text-xl font-bold text-tw-yellow">0</span>
+          </div>
+          <div class="bg-tw-onyx border border-tw-borderDark rounded-xl p-3 text-center">
+            <span class="text-[10px] uppercase font-bold text-tw-mist/60 block">Maior Pontuação</span>
+            <span id="staff-top-score" class="font-bitter text-xl font-bold text-tw-pink">0</span>
+          </div>
+        </div>
+
+        <!-- Primary Action Buttons: Export CSV & Live Raffle -->
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <button 
+            onclick="exportResultsToCSV()" 
+            class="flex-1 py-3 px-4 rounded-xl bg-tw-jade hover:bg-teal-600 font-bold text-white text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg transition active:scale-95">
+            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+            <span>Exportar resultados (.csv) para sorteio</span>
+          </button>
+
+          <button 
+            onclick="runLiveRaffle()" 
+            class="py-3 px-4 rounded-xl bg-tw-pink hover:bg-tw-pinkHover font-bold text-white text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg glow-pink transition active:scale-95">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Sortear ganhador ao vivo!</span>
+          </button>
+        </div>
+
+        <!-- Raffle Winner Display Area -->
+        <div id="raffle-winner-box" class="hidden bg-gradient-to-r from-tw-wave/60 via-tw-onyx to-tw-pink/30 border border-tw-pink/60 rounded-xl p-4 text-center">
+          <span class="text-xs uppercase font-bold tracking-wider text-tw-yellow">🎉 Ganhador(a) Sorteado(a)</span>
+          <h4 id="raffle-winner-name" class="font-bitter text-xl sm:text-2xl font-bold text-white mt-1">Nome</h4>
+          <p id="raffle-winner-details" class="text-xs text-tw-mist/90 mt-0.5">Empresa • Email • Telefone</p>
+        </div>
+
+        <!-- Registered Players Table -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-tw-mist/75 mb-2">Lista de participantes no iPad</h4>
+          <div class="border border-tw-borderDark rounded-xl overflow-hidden bg-tw-onyx max-h-56 overflow-y-auto text-xs">
+            <table class="w-full text-left">
+              <thead class="bg-tw-darkSurface text-tw-mist/70 border-b border-tw-borderDark uppercase text-[10px]">
+                <tr>
+                  <th class="p-2.5">Nome</th>
+                  <th class="p-2.5">Empresa</th>
+                  <th class="p-2.5">Email</th>
+                  <th class="p-2.5 text-right">Pontos</th>
+                </tr>
+              </thead>
+              <tbody id="staff-table-body" class="divide-y divide-tw-borderDark/40 text-tw-mist">
+                <tr>
+                  <td colspan="4" class="p-4 text-center text-tw-mist/50">Nenhum participante registrado ainda neste iPad.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Staff Footer -->
+      <div class="p-3.5 border-t border-tw-borderDark bg-tw-onyx flex justify-between items-center text-xs text-tw-mist/60">
+        <span>Dados armazenados para o sorteio do evento</span>
+        <button onclick="toggleStaffModal(false)" class="px-4 py-2 rounded-lg bg-tw-darkSurface hover:bg-slate-700 text-white font-semibold transition">
+          Fechar
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= REVIEW MODAL (FULL ANSWERS & THOUGHTWORKS PHILOSOPHY) ================= -->
+  <div id="modal-review" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-tw-darkSurface border border-tw-borderDark rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="p-4 sm:p-5 border-b border-tw-borderDark flex items-center justify-between bg-tw-onyx">
+        <div class="flex items-center space-x-2.5">
+          <div class="p-2 bg-tw-wave/40 text-teal-300 rounded-lg">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="modal-review-title" class="font-bitter text-base sm:text-lg font-bold text-white">Visão da Thoughtworks</h3>
+            <p id="modal-review-desc" class="text-xs text-tw-mist/70">Síntese dos slides de Engenharia de Plataforma e IA</p>
+          </div>
+        </div>
+        <button onclick="toggleReviewModal(false)" class="p-2 rounded-lg text-tw-mist hover:text-white hover:bg-tw-darkSurface transition active:scale-90">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Q&A List -->
+      <div id="review-content" class="p-4 sm:p-6 space-y-4 overflow-y-auto">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3.5 border-t border-tw-borderDark bg-tw-onyx flex justify-end">
+        <button id="modal-close-btn" onclick="toggleReviewModal(false)" class="px-5 py-2.5 rounded-lg bg-tw-wave hover:bg-tw-waveLight font-bold text-white text-xs sm:text-sm transition active:scale-95">
+          Fechar revisão
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="w-full border-t border-tw-borderDark/60 bg-tw-onyx/90 py-3 text-center text-xs text-tw-mist/60">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-1.5">
+      <div class="flex items-center space-x-2 select-none">
+        <svg class="h-4 w-2.5 fill-current text-tw-pink" viewBox="0 0 14 26" aria-hidden="true">
+          <polygon points="9,1 14,1 5,25 0,25" />
+        </svg>
+        <span class="font-bold text-white font-sans">Thoughtworks</span>
+        <span class="text-[10px] text-tw-mist/60 font-sans">Design. Engineering. AI.</span>
+        <span id="footer-tag" class="ml-1">• Engenharia de plataforma e AI</span>
+      </div>
+      <div>
+        <span id="footer-sys">Design system: Marca empregadora • Bitter &amp; Inter</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= JAVASCRIPT APPLICATION LOGIC ================= -->
+  <script>
+    /* =========================================================
+     * 1. BILINGUAL DICTIONARY & 5 SHORT QUESTIONS (VARIED OPTIONS)
+     * ========================================================= */
+    let currentLang = 'pt'; // 'pt' or 'en'
+
+    const TRANSLATIONS = {
+      pt: {
+        navSubtitle: "Engenharia de plataforma e AI",
+        badgeIpad: "iPad Booth Edition",
+        heroTag: "Desafio interativo no estande",
+        heroTitle: "Acelere sua entrega com engenharia de plataforma",
+        heroDesc: "Responda 5 perguntas rápidas sobre plataformas modernas, reduza o retrabalho dos times e retire seu brinde exclusivo da Thoughtworks no estande!",
+        swagTableNotice: "Ao finalizar o quiz, retire um brinde na mesa",
+        badgeScoring: "⚡ 25s por pergunta • Tempo × Acerto",
+        lblName: "Nome completo",
+        placeholderName: "Ex: Alex Santana",
+        errName: "Por favor, informe seu nome.",
+        lblRole: "Cargo ou função",
+        placeholderRole: "Ex: Tech Lead, Arquiteto(a), Dev",
+        errRole: "Por favor, informe seu cargo ou função.",
+        lblCompany: "Nome da empresa",
+        placeholderCompany: "Ex: Nubank, Localiza, Itaú",
+        errCompany: "Por favor, informe sua empresa.",
+        lblEmail: "E-mail corporativo ou pessoal",
+        placeholderEmail: "alex@empresa.com",
+        errEmail: "Insira um e-mail válido.",
+        lblPhone: "Telefone / WhatsApp",
+        placeholderPhone: "(11) 98765-4321",
+        errPhone: "Insira um telefone de contato.",
+        consentText: "<span class='font-semibold text-white'>Consentimento de participação e brinde <span class='text-tw-pink'>*</span>:</span> Concordo em compartilhar minhas informações com a Thoughtworks para participar do quiz e receber o brinde no estande.",
+        errConsent: "É obrigatório aceitar o compartilhamento para jogar e retirar o brinde.",
+        newsletterText: "<span class='font-semibold text-white'>Novidades e Tech Radar Thoughtworks:</span> Quero receber publicações sobre Engenharia de plataforma e AI e o Radar Tecnológico da Thoughtworks. (Opcional)",
+        btnStart: "Começar o desafio",
+        lblTimeLeft: "Tempo",
+        lblTotalScore: "Pontos",
+        speedHint: "⚡ Responda rápido para acumular mais pontos!",
+        twVerified: "Visão Thoughtworks",
+        lblRecapQ: "Pergunta",
+        lblTwExplanationTitle: "O que a Thoughtworks diz sobre isso",
+        nextBtnText: "Próxima pergunta",
+        finishBtnText: "Ver resultado & retirar brinde",
+        resultsBadge: "Desafio concluído com sucesso!",
+        resultsTitle: "Potencialize a eficácia da sua engenharia",
+        resultsDesc: "Parabéns pela participação! Veja sua pontuação e retire seu brinde na mesa com a equipe Thoughtworks.",
+        lblScoreResult: "Pontos",
+        lblAccuracyResult: "Precisão",
+        lblStreakResult: "Maior streak",
+        lblTierResult: "Categoria",
+        txtIpadBoothCallout: "Ao finalizar o quiz, retire um brinde na mesa",
+        confTag: "Engenharia de plataforma e AI",
+        btnReviewText: "Revisar as 5 respostas da Thoughtworks",
+        btnPlayAgainText: "Próximo participante / Novo jogo",
+        modalReviewTitle: "Visão da Thoughtworks",
+        modalReviewDesc: "Síntese dos slides de Engenharia de plataforma e AI",
+        modalCloseBtn: "Fechar revisão",
+        keyTakeaway: "Ponto-chave:",
+        footerTag: "• Engenharia de plataforma e AI",
+        footerSys: "Design system: Marca empregadora • Bitter & Inter",
+        correctFeedbackTitle: "Na mosca! Exatamente como a Thoughtworks pensa.",
+        timeOutFeedbackTitle: "Tempo esgotado!",
+        wrongFeedbackTitle: "Não foi bem assim! Mas veja a visão da Thoughtworks:",
+        streakText: "Streak!",
+        questionPrefix: "Pergunta",
+        ofText: "de"
+      },
+      en: {
+        navSubtitle: "Platform engineering and AI",
+        badgeIpad: "iPad Booth Edition",
+        heroTag: "Interactive booth challenge",
+        heroTitle: "Accelerate delivery with platform engineering",
+        heroDesc: "Answer 5 quick questions on modern platforms, eliminate toil, and collect your exclusive Thoughtworks swag at the booth!",
+        swagTableNotice: "Upon completing the quiz, pick up your gift at the table",
+        badgeScoring: "⚡ 25s per question • Speed × Accuracy bonus",
+        lblName: "Full name",
+        placeholderName: "e.g. Alex Morgan",
+        errName: "Please enter your full name.",
+        lblRole: "Role or title",
+        placeholderRole: "e.g. Tech Lead, Architect, Dev",
+        errRole: "Please enter your role or title.",
+        lblCompany: "Company name",
+        placeholderCompany: "e.g. Acme Innovations",
+        errCompany: "Please enter your company name.",
+        lblEmail: "Company or personal email",
+        placeholderEmail: "alex@company.com",
+        errEmail: "Please enter a valid email.",
+        lblPhone: "Phone number / WhatsApp",
+        placeholderPhone: "+1 (555) 019-2834",
+        errPhone: "Please enter a contact phone number.",
+        consentText: "<span class='font-semibold text-white'>Event participation & swag consent <span class='text-tw-pink'>*</span>:</span> I agree to share my information with Thoughtworks to take the quiz and collect my booth swag gift.",
+        errConsent: "Consent is required to participate and claim your swag gift.",
+        newsletterText: "<span class='font-semibold text-white'>Thoughtworks Tech Radar & Insights:</span> Send me the latest editions on Platform engineering and AI and the Thoughtworks Tech Radar. (Optional)",
+        btnStart: "Start the quiz challenge",
+        lblTimeLeft: "Time left",
+        lblTotalScore: "Score",
+        speedHint: "⚡ Answer quickly to maximize your speed bonus!",
+        twVerified: "Thoughtworks Insight",
+        lblRecapQ: "Question",
+        lblTwExplanationTitle: "What Thoughtworks says about this",
+        nextBtnText: "Next question",
+        finishBtnText: "View results & collect swag",
+        resultsBadge: "Challenge completed successfully!",
+        resultsTitle: "Power your engineering effectiveness",
+        resultsDesc: "Great job! Here is your score breakdown. Pick up your gift at the table with the Thoughtworks team.",
+        lblScoreResult: "Score",
+        lblAccuracyResult: "Accuracy",
+        lblStreakResult: "Best streak",
+        lblTierResult: "Tier badge",
+        txtIpadBoothCallout: "Upon completing the quiz, pick up your gift at the table",
+        confTag: "Platform engineering and AI",
+        btnReviewText: "Review all 5 Thoughtworks answers",
+        btnPlayAgainText: "Next participant / Play again",
+        modalReviewTitle: "Thoughtworks perspective",
+        modalReviewDesc: "Summary from the Platform engineering and AI deck",
+        modalCloseBtn: "Close review",
+        keyTakeaway: "Key takeaway:",
+        footerTag: "• Platform engineering and AI",
+        footerSys: "Design system: Employer brand • Bitter & Inter",
+        correctFeedbackTitle: "Spot on! That's how Thoughtworks builds platforms.",
+        timeOutFeedbackTitle: "Time expired!",
+        wrongFeedbackTitle: "Not quite! Here is the Thoughtworks perspective:",
+        streakText: "Streak!",
+        questionPrefix: "Question",
+        ofText: "of"
+      }
+    };
+
+    /* 5 Shortened Questions with VARIED correct alternatives (C, A, D, B, C) */
+    const QUIZ_QUESTIONS = [
+      {
+        id: 1,
+        category: { pt: "Evolução do DevOps", en: "DevOps Evolution" },
+        question: {
+          pt: "Como resolver a sobrecarga do desenvolvedor no modelo 'você cria, você opera' (DevOps tradicional)?",
+          en: "How should organizations solve developer burnout in the traditional 'you build it, you run it' model?"
+        },
+        options: {
+          pt: [
+            { text: "Aumentar as reuniões diárias e exigir plantões noturnos", correct: false },
+            { text: "Contratar mais pessoas só para abrir e aprovar chamados manuais", correct: false },
+            { text: "Construir uma Plataforma de Engenharia como produto interno com caminhos pavimentados (paved paths)", correct: true }, // C is correct
+            { text: "Abolir a nuvem e voltar a comprar servidores físicos", correct: false }
+          ],
+          en: [
+            { text: "Schedule more daily syncs and enforce night-shift on-calls", correct: false },
+            { text: "Hire more personnel solely to process manual approval tickets", correct: false },
+            { text: "Build an Engineering Platform as an internal product with paved paths", correct: true }, // C is correct
+            { text: "Abandon the cloud and return to on-premise physical servers", correct: false }
+          ]
+        },
+        explanation: {
+          pt: "A Thoughtworks destaca que a Engenharia de Plataforma abstrai a complexidade operacional da nuvem. O objetivo é fornecer 'paved roads' e autoatendimento, reduzindo a fadiga cognitiva dos times de produto.",
+          en: "Thoughtworks emphasizes that Platform Engineering abstracts operational cloud complexity through paved roads and self-service, eliminating cognitive overload."
+        }
+      },
+      {
+        id: 2,
+        category: { pt: "Platform as a Product", en: "Platform as a Product" },
+        question: {
+          pt: "Qual é a regra de ouro do 'Platform as a Product' na visão da Thoughtworks?",
+          en: "What is the golden rule of 'Platform as a Product' in Thoughtworks' view?"
+        },
+        options: {
+          pt: [
+            { text: "Tratar desenvolvedores como clientes, criando ferramentas que eles realmente escolham usar", correct: true }, // A is correct
+            { text: "Obrigar a adoção por decreto da diretoria com auditorias surpresa", correct: false },
+            { text: "Esconder a documentação para forçar os squads a agendarem reuniões", correct: false },
+            { text: "Criar a infraestrutura mais complexa possível para justificar o time", correct: false }
+          ],
+          en: [
+            { text: "Treat developers as customers, building tools they genuinely choose to use", correct: true }, // A is correct
+            { text: "Mandate adoption through executive orders and surprise audits", correct: false },
+            { text: "Hide technical documentation to force teams into alignment meetings", correct: false },
+            { text: "Design overly complex infrastructure to justify the team's existence", correct: false }
+          ]
+        },
+        explanation: {
+          pt: "A Thoughtworks defende que a adoção de plataformas internas deve ser voluntária e orientada a valor. O time de plataforma opera como um time de produto: com Product Manager, foco em DevEx e SLOs sólidos.",
+          en: "Thoughtworks believes internal platform adoption should be voluntary and value-driven. Platform teams operate with PMs, clear DevEx metrics, and solid SLOs."
+        }
+      },
+      {
+        id: 3,
+        category: { pt: "Blocos da Plataforma", en: "Platform Architecture" },
+        question: {
+          pt: "Quais são os 4 blocos fundamentais de uma Engineering Platform na arquitetura Thoughtworks?",
+          en: "Which 4 building blocks form an Engineering Platform in Thoughtworks' blueprint?"
+        },
+        options: {
+          pt: [
+            { text: "Docker, Kubernetes, Terraform e Helm", correct: false },
+            { text: "Frontend, Backend, Banco de dados e API Gateway", correct: false },
+            { text: "Jira, Slack, planilhas e e-mails de homologação", correct: false },
+            { text: "Delivery Infra Hub, Service Hub, Knowledge Hub e Portal DevEx", correct: true } // D is correct
+          ],
+          en: [
+            { text: "Docker, Kubernetes, Terraform, and Helm", correct: false },
+            { text: "Frontend, Backend, Database, and API Gateway", correct: false },
+            { text: "Jira, Slack, spreadsheets, and sign-off emails", correct: false },
+            { text: "Delivery Infra Hub, Service Hub, Knowledge Hub, and DevEx Portal", correct: true } // D is correct
+          ]
+        },
+        explanation: {
+          pt: "A Thoughtworks estrutura a plataforma em 4 pilares: Delivery Infra Hub (infra elástica e CI/CD), Service Hub (descoberta de APIs/eventos), Knowledge Hub (padrões e ADRs) e Portal DevEx (interface unificada de autoatendimento).",
+          en: "Thoughtworks organizes platforms into 4 pillars: Delivery Infra Hub (CI/CD and infra), Service Hub (APIs/events), Knowledge Hub (guidelines & ADRs), and DevEx Portal (unified interface)."
+        }
+      },
+      {
+        id: 4,
+        category: { pt: "Impacto no Mundo Real", en: "Real-world Impact" },
+        question: {
+          pt: "Com a plataforma NEO (Thoughtworks) e em clientes como TELUS, qual foi o ganho no tempo de provisionamento?",
+          en: "In the NEO platform (Thoughtworks) and TELUS, what was the impact on infrastructure provisioning?"
+        },
+        options: {
+          pt: [
+            { text: "Apenas 5% de melhoria marginal", correct: false },
+            { text: "Queda de 90%: de semanas de espera para minutos via autoatendimento", correct: true }, // B is correct
+            { text: "Nenhuma mudança, apenas os formulários mudaram de cor", correct: false },
+            { text: "O tempo aumentou para exigir mais comitês de aprovação", correct: false }
+          ],
+          en: [
+            { text: "Only a 5% marginal improvement", correct: false },
+            { text: "90% reduction: from weeks of waiting down to minutes via self-service", correct: true }, // B is correct
+            { text: "Zero change, just recolored request tickets", correct: false },
+            { text: "Provisioning time increased due to extra approval gates", correct: false }
+          ]
+        },
+        explanation: {
+          pt: "Ao substituir chamados manuais por templates de serviço e infraestrutura como código (Project Catalyst), o tempo para ir da ideia à primeira linha de código em produção caiu mais de 90%.",
+          en: "By replacing manual ticketing with pre-baked service templates and infrastructure as code, time from idea to first line of production code dropped by 90%."
+        }
+      },
+      {
+        id: 5,
+        category: { pt: "Portais DevEx & AI", en: "DevEx Portals & AI" },
+        question: {
+          pt: "Qual framework open source (CNCF) a Thoughtworks adota como base para portais de autoatendimento?",
+          en: "Which CNCF open-source framework does Thoughtworks champion for building developer portals?"
+        },
+        options: {
+          pt: [
+            { text: "WordPress Developer Edition", correct: false },
+            { text: "Microsoft SharePoint Intranet", correct: false },
+            { text: "Backstage.io (criado pelo Spotify e incubado pela CNCF)", correct: true }, // C is correct
+            { text: "Redmine Wiki Corporativo", correct: false }
+          ],
+          en: [
+            { text: "WordPress Developer Edition", correct: false },
+            { text: "Microsoft SharePoint Intranet", correct: false },
+            { text: "Backstage.io (created by Spotify and incubated by CNCF)", correct: true }, // C is correct
+            { text: "Redmine Corporate Wiki", correct: false }
+          ]
+        },
+        explanation: {
+          pt: "O Backstage.io é o framework de referência adotado pela Thoughtworks por sua arquitetura modular de plugins e catálogo centralizado de microsserviços, servindo de base sólida inclusive para esteiras de IA.",
+          en: "Backstage.io is Thoughtworks' reference framework for developer portals, offering a plugin architecture and unified software catalog that also acts as a foundation for AI workflows."
+        }
+      }
+    ];
+
+    /* =========================================================
+     * 2. STATE MANAGEMENT & SCORING (25 SECONDS TIMER)
+     * ========================================================= */
+    const QUESTION_TIME_SECONDS = 25; // 25s per question as requested
+
+    let appState = {
+      user: {
+        name: "",
+        role: "",
+        company: "",
+        email: "",
+        phone: "",
+        consentShare: false,
+        newsletter: false
+      },
+      currentQuestionIndex: 0,
+      score: 0,
+      streak: 0,
+      maxStreak: 0,
+      correctCount: 0,
+      secondsRemaining: QUESTION_TIME_SECONDS,
+      timerInterval: null,
+      questionStartTime: 0,
+      isAnswerSubmitted: false,
+      userAnswers: [],
+      playersHistory: [], // Holds all players on this iPad for the CSV export & raffle
+      soundMuted: false
+    };
+
+    /* =========================================================
+     * 3. LANGUAGE SWITCHER (PT / EN)
+     * ========================================================= */
+    function toggleLanguage() {
+      currentLang = currentLang === 'pt' ? 'en' : 'pt';
+      applyLanguage();
+      playSound('click');
+    }
+
+    function applyLanguage() {
+      const t = TRANSLATIONS[currentLang];
+      
+      // Update Navbar & Badges
+      document.getElementById("nav-subtitle").textContent = t.navSubtitle;
+      document.getElementById("lang-flag").textContent = currentLang === 'pt' ? '🇧🇷' : '🇺🇸';
+      document.getElementById("lang-label").textContent = currentLang === 'pt' ? 'PT' : 'EN';
+      const badgeIpad = document.getElementById("badge-ipad");
+      if (badgeIpad) {
+        badgeIpad.innerHTML = `<i data-lucide="tablet" class="w-3.5 h-3.5 mr-1.5 text-tw-yellow"></i> ${t.badgeIpad}`;
+      }
+
+      // Update Registration Screen
+      document.getElementById("txt-hero-tag").textContent = t.heroTag;
+      document.getElementById("txt-hero-title").textContent = t.heroTitle;
+      document.getElementById("txt-hero-desc").textContent = t.heroDesc;
+      document.getElementById("txt-swag-table-notice").textContent = t.swagTableNotice;
+      document.getElementById("txt-badge-scoring").textContent = t.badgeScoring;
+
+      document.getElementById("lbl-name").innerHTML = `${t.lblName} <span class="text-tw-pink">*</span>`;
+      document.getElementById("reg-name").placeholder = t.placeholderName;
+      document.getElementById("err-name").textContent = t.errName;
+
+      document.getElementById("lbl-role").innerHTML = `${t.lblRole} <span class="text-tw-pink">*</span>`;
+      document.getElementById("reg-role").placeholder = t.placeholderRole;
+      document.getElementById("err-role").textContent = t.errRole;
+
+      document.getElementById("lbl-company").innerHTML = `${t.lblCompany} <span class="text-tw-pink">*</span>`;
+      document.getElementById("reg-company").placeholder = t.placeholderCompany;
+      document.getElementById("err-company").textContent = t.errCompany;
+
+      document.getElementById("lbl-email").innerHTML = `${t.lblEmail} <span class="text-tw-pink">*</span>`;
+      document.getElementById("reg-email").placeholder = t.placeholderEmail;
+      document.getElementById("err-email").textContent = t.errEmail;
+
+      document.getElementById("lbl-phone").innerHTML = `${t.lblPhone} <span class="text-tw-pink">*</span>`;
+      document.getElementById("reg-phone").placeholder = t.placeholderPhone;
+      document.getElementById("err-phone").textContent = t.errPhone;
+
+      document.getElementById("lbl-consent-text").innerHTML = t.consentText;
+      document.getElementById("err-consent").textContent = t.errConsent;
+      document.getElementById("lbl-newsletter-text").innerHTML = t.newsletterText;
+      document.getElementById("btn-start-text").textContent = t.btnStart;
+
+      // Update Quiz Screen HUD & Hints
+      const lblTimeLeft = document.getElementById("lbl-time-left");
+      if (lblTimeLeft) lblTimeLeft.textContent = t.lblTimeLeft;
+      const lblTotalScore = document.getElementById("lbl-total-score");
+      if (lblTotalScore) lblTotalScore.textContent = t.lblTotalScore;
+      document.getElementById("txt-speed-hint").textContent = t.speedHint;
+      document.getElementById("txt-thoughtworks-verified").textContent = t.twVerified;
+
+      // Update Feedback Screen
+      document.getElementById("lbl-recap-q").textContent = t.lblRecapQ;
+      document.getElementById("lbl-tw-explanation-title").textContent = t.lblTwExplanationTitle;
+
+      // Update Results Screen
+      document.getElementById("txt-results-badge").textContent = t.resultsBadge;
+      document.getElementById("txt-results-title").textContent = t.resultsTitle;
+      document.getElementById("txt-results-desc").textContent = t.resultsDesc;
+      document.getElementById("lbl-score-result").textContent = t.lblScoreResult;
+      document.getElementById("lbl-accuracy-result").textContent = t.lblAccuracyResult;
+      document.getElementById("lbl-streak-result").textContent = t.lblStreakResult;
+      document.getElementById("lbl-tier-result").textContent = t.lblTierResult;
+      document.getElementById("txt-ipad-booth-callout").textContent = t.txtIpadBoothCallout;
+      document.getElementById("txt-conf-tag").textContent = t.confTag;
+      document.getElementById("btn-review-text").textContent = t.btnReviewText;
+      document.getElementById("btn-play-again-text").textContent = t.btnPlayAgainText;
+
+      // Update Modal
+      document.getElementById("modal-review-title").textContent = t.modalReviewTitle;
+      document.getElementById("modal-review-desc").textContent = t.modalReviewDesc;
+      document.getElementById("modal-close-btn").textContent = t.modalCloseBtn;
+
+      // Update Footer
+      document.getElementById("footer-tag").textContent = t.footerTag;
+      document.getElementById("footer-sys").textContent = t.footerSys;
+
+      // If active on question or feedback or results, re-render texts
+      if (!document.getElementById("screen-quiz").classList.contains("hidden")) {
+        renderCurrentQuestion();
+      } else if (!document.getElementById("screen-feedback").classList.contains("hidden")) {
+        refreshFeedbackLanguage();
+      } else if (!document.getElementById("screen-results").classList.contains("hidden")) {
+        updateResultsTier();
+      }
+
+      lucide.createIcons();
+    }
+
+    /* =========================================================
+     * 4. AUDIO ENGINE (TONE.JS)
+     * ========================================================= */
+    let toneSynth = null;
+
+    function initAudio() {
+      try {
+        if (!toneSynth && window.Tone) {
+          toneSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: "triangle" },
+            envelope: { attack: 0.005, decay: 0.1, sustain: 0.2, release: 0.4 }
+          }).toDestination();
+          toneSynth.volume.value = -8;
+        }
+        if (Tone && Tone.context.state !== 'running') {
+          Tone.start();
+        }
+      } catch (err) {
+        console.warn("Audio waiting for user gesture:", err);
+      }
+    }
+
+    function playSound(type) {
+      if (appState.soundMuted || !window.Tone) return;
+      initAudio();
+
+      try {
+        const now = Tone.now();
+        if (type === 'correct') {
+          toneSynth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "16n", now, 0.4);
+        } else if (type === 'wrong') {
+          toneSynth.triggerAttackRelease(["F3", "Db3"], "8n", now, 0.4);
+        } else if (type === 'tick') {
+          toneSynth.triggerAttackRelease(["A4"], "32n", now, 0.1);
+        } else if (type === 'urgent-tick') {
+          toneSynth.triggerAttackRelease(["D5"], "32n", now, 0.2);
+        } else if (type === 'fanfare') {
+          toneSynth.triggerAttackRelease(["C4", "G4", "C5", "E5", "G5"], "8n", now);
+        } else if (type === 'click') {
+          toneSynth.triggerAttackRelease(["G4"], "32n", now, 0.1);
+        }
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      appState.soundMuted = !appState.soundMuted;
+      const icon = document.getElementById("sound-icon");
+      if (appState.soundMuted) {
+        icon.setAttribute("data-lucide", "volume-x");
+      } else {
+        icon.setAttribute("data-lucide", "volume-2");
+        playSound('click');
+      }
+      lucide.createIcons();
+    }
+
+    /* =========================================================
+     * 5. REGISTRATION SUBMIT
+     * ========================================================= */
+    function handleRegistrationSubmit(event) {
+      event.preventDefault();
+      initAudio();
+
+      const name = document.getElementById("reg-name").value.trim();
+      const role = document.getElementById("reg-role").value.trim();
+      const company = document.getElementById("reg-company").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const phone = document.getElementById("reg-phone").value.trim();
+      const consentShare = document.getElementById("reg-consent-share").checked;
+      const newsletter = document.getElementById("reg-newsletter").checked;
+
+      document.getElementById("err-name").classList.add("hidden");
+      document.getElementById("err-role").classList.add("hidden");
+      document.getElementById("err-company").classList.add("hidden");
+      document.getElementById("err-email").classList.add("hidden");
+      document.getElementById("err-phone").classList.add("hidden");
+      document.getElementById("err-consent").classList.add("hidden");
+
+      let hasError = false;
+
+      if (!name) {
+        document.getElementById("err-name").classList.remove("hidden");
+        hasError = true;
+      }
+      if (!role) {
+        document.getElementById("err-role").classList.remove("hidden");
+        hasError = true;
+      }
+      if (!company) {
+        document.getElementById("err-company").classList.remove("hidden");
+        hasError = true;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email || !emailRegex.test(email)) {
+        document.getElementById("err-email").classList.remove("hidden");
+        hasError = true;
+      }
+      if (!phone || phone.length < 6) {
+        document.getElementById("err-phone").classList.remove("hidden");
+        hasError = true;
+      }
+      if (!consentShare) {
+        document.getElementById("err-consent").classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (hasError) {
+        playSound('wrong');
+        return;
+      }
+
+      appState.user = { 
+        name, 
+        role, 
+        company, 
+        email, 
+        phone, 
+        consentShare, 
+        newsletter,
+        timestamp: new Date().toLocaleString('pt-BR')
+      };
+
+      playSound('click');
+      startQuizGame();
+    }
+
+    /* =========================================================
+     * 6. QUIZ LOGIC
+     * ========================================================= */
+    function startQuizGame() {
+      document.getElementById("screen-registration").classList.add("hidden");
+      document.getElementById("screen-quiz").classList.remove("hidden");
+      document.getElementById("screen-feedback").classList.add("hidden");
+      document.getElementById("screen-results").classList.add("hidden");
+
+      appState.currentQuestionIndex = 0;
+      appState.score = 0;
+      appState.streak = 0;
+      appState.maxStreak = 0;
+      appState.correctCount = 0;
+      appState.userAnswers = [];
+
+      updateScoreDisplay();
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      appState.isAnswerSubmitted = false;
+      const q = QUIZ_QUESTIONS[appState.currentQuestionIndex];
+      const t = TRANSLATIONS[currentLang];
+
+      document.getElementById("quiz-progress-text").textContent = `${t.questionPrefix} ${appState.currentQuestionIndex + 1} ${t.ofText} ${QUIZ_QUESTIONS.length}`;
+      document.getElementById("question-category").innerHTML = `<i data-lucide="layers" class="w-3.5 h-3.5"></i> ${q.category[currentLang]}`;
+      document.getElementById("question-text").textContent = q.question[currentLang];
+
+      const pct = ((appState.currentQuestionIndex + 1) / QUIZ_QUESTIONS.length) * 100;
+      document.getElementById("quiz-progress-bar").style.width = `${pct}%`;
+
+      const streakPill = document.getElementById("streak-pill");
+      if (appState.streak >= 2) {
+        streakPill.classList.remove("hidden");
+        streakPill.classList.add("inline-flex");
+        document.getElementById("streak-count").textContent = appState.streak;
+      } else {
+        streakPill.classList.add("hidden");
+        streakPill.classList.remove("inline-flex");
+      }
+
+      const grid = document.getElementById("options-grid");
+      grid.innerHTML = "";
+
+      const alphabet = ["A", "B", "C", "D"];
+      const currentOptions = q.options[currentLang];
+
+      currentOptions.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "w-full text-left p-4 rounded-xl bg-tw-onyx border border-tw-borderDark hover:border-tw-pink/70 hover:bg-slate-800 transition-all flex items-start space-x-3.5 group cursor-pointer active:scale-[0.99] min-h-[56px]";
+        btn.onclick = () => selectOption(idx);
+        btn.id = `option-btn-${idx}`;
+
+        btn.innerHTML = `
+          <span class="flex-shrink-0 w-7 h-7 rounded-lg bg-tw-darkSurface border border-tw-borderDark flex items-center justify-center text-xs font-bold text-tw-mist group-hover:text-white group-hover:border-tw-pink transition">
+            ${alphabet[idx]}
+          </span>
+          <span class="text-sm sm:text-base text-tw-mist group-hover:text-white font-medium leading-relaxed">
+            ${opt.text}
+          </span>
+        `;
+        grid.appendChild(btn);
+      });
+
+      lucide.createIcons();
+      startQuestionTimer();
+    }
+
+    function startQuestionTimer() {
+      clearInterval(appState.timerInterval);
+      appState.secondsRemaining = QUESTION_TIME_SECONDS;
+      appState.questionStartTime = Date.now();
+      updateTimerUI();
+
+      appState.timerInterval = setInterval(() => {
+        appState.secondsRemaining--;
+        updateTimerUI();
+
+        if (appState.secondsRemaining <= 5 && appState.secondsRemaining > 0) {
+          playSound('urgent-tick');
+        }
+
+        if (appState.secondsRemaining <= 0) {
+          clearInterval(appState.timerInterval);
+          handleTimeOut();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      const timerText = document.getElementById("timer-text");
+      const circlePath = document.getElementById("timer-circle-path");
+      
+      timerText.textContent = `${appState.secondsRemaining}s`;
+
+      const pct = (appState.secondsRemaining / QUESTION_TIME_SECONDS) * 100;
+      circlePath.setAttribute("stroke-dasharray", `${pct}, 100`);
+
+      if (appState.secondsRemaining > 12) {
+        circlePath.setAttribute("class", "text-tw-jade transition-all duration-1000 ease-linear");
+        timerText.className = "font-bitter text-lg sm:text-xl font-bold text-tw-jade";
+      } else if (appState.secondsRemaining > 6) {
+        circlePath.setAttribute("class", "text-tw-yellow transition-all duration-1000 ease-linear");
+        timerText.className = "font-bitter text-lg sm:text-xl font-bold text-tw-yellow";
+      } else {
+        circlePath.setAttribute("class", "text-tw-pink transition-all duration-1000 ease-linear");
+        timerText.className = "font-bitter text-lg sm:text-xl font-bold text-tw-pink urgent-timer";
+      }
+    }
+
+    function handleTimeOut() {
+      if (appState.isAnswerSubmitted) return;
+      appState.isAnswerSubmitted = true;
+      playSound('wrong');
+      evaluateAnswer(-1, false, 0);
+    }
+
+    function selectOption(selectedIdx) {
+      if (appState.isAnswerSubmitted) return;
+      appState.isAnswerSubmitted = true;
+      clearInterval(appState.timerInterval);
+
+      const q = QUIZ_QUESTIONS[appState.currentQuestionIndex];
+      const isCorrect = q.options[currentLang][selectedIdx].correct;
+
+      let pointsAwarded = 0;
+      if (isCorrect) {
+        const timeBonus = appState.secondsRemaining * 50;
+        const streakBonus = appState.streak * 150;
+        pointsAwarded = 1000 + timeBonus + streakBonus;
+        appState.streak++;
+        if (appState.streak > appState.maxStreak) {
+          appState.maxStreak = appState.streak;
+        }
+        appState.correctCount++;
+        playSound('correct');
+      } else {
+        appState.streak = 0;
+        playSound('wrong');
+      }
+
+      appState.score += pointsAwarded;
+      updateScoreDisplay();
+      highlightOptionButtons(selectedIdx, isCorrect);
+
+      setTimeout(() => {
+        evaluateAnswer(selectedIdx, isCorrect, pointsAwarded);
+      }, 700);
+    }
+
+    function highlightOptionButtons(selectedIdx, isCorrect) {
+      const q = QUIZ_QUESTIONS[appState.currentQuestionIndex];
+      const opts = q.options[currentLang];
+
+      opts.forEach((opt, idx) => {
+        const btn = document.getElementById(`option-btn-${idx}`);
+        if (!btn) return;
+        btn.classList.add("pointer-events-none");
+
+        if (idx === selectedIdx) {
+          if (isCorrect) {
+            btn.className = "w-full text-left p-4 rounded-xl bg-tw-jade/25 border-2 border-tw-jade text-white transition-all flex items-start space-x-3.5";
+          } else {
+            btn.className = "w-full text-left p-4 rounded-xl bg-tw-pink/25 border-2 border-tw-pink text-white transition-all flex items-start space-x-3.5";
+          }
+        } else if (opt.correct) {
+          btn.className = "w-full text-left p-4 rounded-xl bg-tw-jade/15 border border-tw-jade/50 text-white transition-all flex items-start space-x-3.5";
+        } else {
+          btn.classList.add("opacity-40");
+        }
+      });
+    }
+
+    function updateScoreDisplay() {
+      const hudScore = document.getElementById("hud-score");
+      if (hudScore) {
+        hudScore.textContent = appState.score.toLocaleString();
+      }
+    }
+
+    /* =========================================================
+     * 7. ANSWER EVALUATION & THOUGHTWORKS EXPLANATION
+     * ========================================================= */
+    function evaluateAnswer(selectedIdx, isCorrect, pointsAwarded) {
+      const q = QUIZ_QUESTIONS[appState.currentQuestionIndex];
+      appState.userAnswers.push({
+        questionId: q.id,
+        selectedIdx,
+        isCorrect,
+        pointsAwarded
+      });
+
+      document.getElementById("screen-quiz").classList.add("hidden");
+      document.getElementById("screen-feedback").classList.remove("hidden");
+
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById("feedback-banner");
+      const iconBox = document.getElementById("feedback-icon-box");
+      const title = document.getElementById("feedback-status-title");
+      const sub = document.getElementById("feedback-points-sub");
+
+      if (selectedIdx === -1) {
+        banner.className = "flex items-center space-x-3.5 p-4 rounded-xl mb-5 bg-tw-pink/15 border border-tw-pink/40";
+        iconBox.className = "p-2.5 rounded-xl bg-tw-pink/20 text-tw-pink flex-shrink-0";
+        iconBox.innerHTML = '<i data-lucide="clock-alert" class="w-6 h-6"></i>';
+        title.textContent = t.timeOutFeedbackTitle;
+        title.className = "font-bitter text-lg sm:text-xl font-bold text-tw-pink";
+        sub.textContent = currentLang === 'pt' ? "+0 pontos (tempo esgotado)" : "+0 points (time expired)";
+        sub.className = "text-xs sm:text-sm font-semibold text-tw-mist/80";
+      } else if (isCorrect) {
+        banner.className = "flex items-center space-x-3.5 p-4 rounded-xl mb-5 bg-tw-jade/15 border border-tw-jade/40";
+        iconBox.className = "p-2.5 rounded-xl bg-tw-jade/20 text-teal-300 flex-shrink-0";
+        iconBox.innerHTML = '<i data-lucide="check-circle-2" class="w-6 h-6"></i>';
+        title.textContent = t.correctFeedbackTitle;
+        title.className = "font-bitter text-lg sm:text-xl font-bold text-teal-300";
+        sub.textContent = `+${pointsAwarded.toLocaleString()} ${t.lblTotalScore.toLowerCase()}!`;
+        sub.className = "text-xs sm:text-sm font-semibold text-tw-yellow";
+      } else {
+        banner.className = "flex items-center space-x-3.5 p-4 rounded-xl mb-5 bg-tw-pink/15 border border-tw-pink/40";
+        iconBox.className = "p-2.5 rounded-xl bg-tw-pink/20 text-tw-pink flex-shrink-0";
+        iconBox.innerHTML = '<i data-lucide="x-circle" class="w-6 h-6"></i>';
+        title.textContent = t.wrongFeedbackTitle;
+        title.className = "font-bitter text-lg sm:text-xl font-bold text-tw-pink";
+        sub.textContent = currentLang === 'pt' ? "+0 pontos nesta rodada" : "+0 points this round";
+        sub.className = "text-xs sm:text-sm font-semibold text-tw-mist/80";
+      }
+
+      document.getElementById("feedback-recap-question").textContent = q.question[currentLang];
+      document.getElementById("feedback-explanation-text").textContent = q.explanation[currentLang];
+
+      const nextBtnText = document.getElementById("next-btn-text");
+      if (appState.currentQuestionIndex === QUIZ_QUESTIONS.length - 1) {
+        nextBtnText.textContent = t.finishBtnText;
+      } else {
+        nextBtnText.textContent = t.nextBtnText;
+      }
+
+      lucide.createIcons();
+    }
+
+    function refreshFeedbackLanguage() {
+      if (document.getElementById("screen-feedback").classList.contains("hidden")) return;
+      const q = QUIZ_QUESTIONS[appState.currentQuestionIndex];
+      const t = TRANSLATIONS[currentLang];
+      const lastAns = appState.userAnswers[appState.userAnswers.length - 1];
+      if (!lastAns) return;
+
+      const title = document.getElementById("feedback-status-title");
+      if (lastAns.selectedIdx === -1) {
+        title.textContent = t.timeOutFeedbackTitle;
+      } else if (lastAns.isCorrect) {
+        title.textContent = t.correctFeedbackTitle;
+      } else {
+        title.textContent = t.wrongFeedbackTitle;
+      }
+
+      document.getElementById("feedback-recap-question").textContent = q.question[currentLang];
+      document.getElementById("feedback-explanation-text").textContent = q.explanation[currentLang];
+
+      const nextBtnText = document.getElementById("next-btn-text");
+      if (appState.currentQuestionIndex === QUIZ_QUESTIONS.length - 1) {
+        nextBtnText.textContent = t.finishBtnText;
+      } else {
+        nextBtnText.textContent = t.nextBtnText;
+      }
+    }
+
+    function handleNextQuestion() {
+      playSound('click');
+      appState.currentQuestionIndex++;
+      if (appState.currentQuestionIndex < QUIZ_QUESTIONS.length) {
+        document.getElementById("screen-feedback").classList.add("hidden");
+        document.getElementById("screen-quiz").classList.remove("hidden");
+        renderCurrentQuestion();
+      } else {
+        showFinalResults();
+      }
+    }
+
+    /* =========================================================
+     * 8. FINAL RESULTS & PERSISTENCE FOR CSV EXPORT
+     * ========================================================= */
+    function showFinalResults() {
+      clearInterval(appState.timerInterval);
+      document.getElementById("screen-quiz").classList.add("hidden");
+      document.getElementById("screen-feedback").classList.add("hidden");
+      document.getElementById("screen-results").classList.remove("hidden");
+
+      playSound('fanfare');
+      fireConfetti();
+
+      const accuracyPct = Math.round((appState.correctCount / QUIZ_QUESTIONS.length) * 100);
+
+      document.getElementById("final-score").textContent = appState.score.toLocaleString();
+      document.getElementById("final-accuracy").textContent = `${accuracyPct}%`;
+      document.getElementById("final-streak").textContent = `${appState.maxStreak}x`;
+
+      document.getElementById("ticket-user-name").textContent = appState.user.name || (currentLang === 'pt' ? "Participante" : "Participant");
+      document.getElementById("ticket-company-role").textContent = `${appState.user.company} • ${appState.user.role}`;
+
+      updateResultsTier();
+
+      // Record player into historical dataset for CSV export and raffle
+      savePlayerToHistory(accuracyPct);
+      lucide.createIcons();
+    }
+
+    function savePlayerToHistory(accuracyPct) {
+      if (!appState.user.name) return;
+
+      const playerRecord = {
+        name: appState.user.name,
+        company: appState.user.company,
+        role: appState.user.role,
+        email: appState.user.email,
+        phone: appState.user.phone,
+        score: appState.score,
+        accuracy: `${accuracyPct}%`,
+        newsletter: appState.user.newsletter ? 'Sim' : 'Não',
+        consentShare: appState.user.consentShare ? 'Sim' : 'Não',
+        timestamp: appState.user.timestamp || new Date().toLocaleString('pt-BR')
+      };
+
+      appState.playersHistory.push(playerRecord);
+      updateStaffUI();
+    }
+
+    function updateResultsTier() {
+      let tierBadge = "";
+
+      if (appState.score >= 8000) {
+        tierBadge = currentLang === 'pt' ? "Visionário em Plataforma" : "Platform Visionary";
+      } else if (appState.score >= 4500) {
+        tierBadge = currentLang === 'pt' ? "Herói dos Paved Paths" : "Paved Road Hero";
+      } else {
+        tierBadge = currentLang === 'pt' ? "Explorador DevEx" : "DevEx Explorer";
+      }
+
+      document.getElementById("final-tier").textContent = tierBadge;
+    }
+
+    /* =========================================================
+     * 9. STAFF PANEL & CSV EXPORT FOR RAFFLE / GIVEAWAY
+     * ========================================================= */
+    function toggleStaffModal(show) {
+      playSound('click');
+      const modal = document.getElementById("modal-staff");
+      if (show) {
+        modal.classList.remove("hidden");
+        updateStaffUI();
+      } else {
+        modal.classList.add("hidden");
+      }
+      lucide.createIcons();
+    }
+
+    function updateStaffUI() {
+      const count = appState.playersHistory.length;
+      document.getElementById("staff-players-pill").textContent = count;
+      document.getElementById("staff-total-count").textContent = count;
+
+      if (count > 0) {
+        const totalScore = appState.playersHistory.reduce((acc, p) => acc + p.score, 0);
+        const avgScore = Math.round(totalScore / count);
+        const topScore = Math.max(...appState.playersHistory.map(p => p.score));
+
+        document.getElementById("staff-avg-score").textContent = avgScore.toLocaleString();
+        document.getElementById("staff-top-score").textContent = topScore.toLocaleString();
+
+        const tbody = document.getElementById("staff-table-body");
+        tbody.innerHTML = "";
+
+        // Display newest first
+        [...appState.playersHistory].reverse().forEach(p => {
+          const row = document.createElement("tr");
+          row.className = "hover:bg-tw-darkSurface/60";
+          row.innerHTML = `
+            <td class="p-2.5 font-medium text-white">${p.name}</td>
+            <td class="p-2.5">${p.company}</td>
+            <td class="p-2.5 text-tw-mist/80">${p.email}</td>
+            <td class="p-2.5 text-right font-bold text-tw-yellow">${p.score.toLocaleString()}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+    }
+
+    function exportResultsToCSV() {
+      playSound('click');
+      if (appState.playersHistory.length === 0) {
+        // Sample player if none yet played, to demonstrate format
+        alertModal("Nenhum jogador registrado ainda neste iPad. Faça um teste jogando o quiz primeiro!");
+        return;
+      }
+
+      const headers = ["Nome", "Empresa", "Cargo", "Email", "Telefone", "Pontuacao", "Precisao", "Aceitou_Newsletter", "Consentimento", "Data_Hora"];
+      
+      const rows = appState.playersHistory.map(p => [
+        `"${(p.name || '').replace(/"/g, '""')}"`,
+        `"${(p.company || '').replace(/"/g, '""')}"`,
+        `"${(p.role || '').replace(/"/g, '""')}"`,
+        `"${(p.email || '').replace(/"/g, '""')}"`,
+        `"${(p.phone || '').replace(/"/g, '""')}"`,
+        p.score,
+        `"${p.accuracy}"`,
+        `"${p.newsletter}"`,
+        `"${p.consentShare}"`,
+        `"${p.timestamp}"`
+      ]);
+
+      // Add BOM (\uFEFF) for Excel UTF-8 compliance with Portuguese accents
+      const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const dateStr = new Date().toISOString().slice(0, 10);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `participantes_thoughtworks_sorteio_${dateStr}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function runLiveRaffle() {
+      playSound('click');
+      if (appState.playersHistory.length === 0) {
+        alertModal("Nenhum participante na lista para sortear ainda!");
+        return;
+      }
+
+      const winnerBox = document.getElementById("raffle-winner-box");
+      const winnerName = document.getElementById("raffle-winner-name");
+      const winnerDetails = document.getElementById("raffle-winner-details");
+
+      winnerBox.classList.remove("hidden");
+      winnerName.textContent = "Sorteando...";
+      winnerDetails.textContent = "Aguarde o resultado!";
+
+      let counter = 0;
+      const shuffleInterval = setInterval(() => {
+        const rand = appState.playersHistory[Math.floor(Math.random() * appState.playersHistory.length)];
+        winnerName.textContent = rand.name;
+        counter++;
+        if (counter > 15) {
+          clearInterval(shuffleInterval);
+          const chosen = appState.playersHistory[Math.floor(Math.random() * appState.playersHistory.length)];
+          winnerName.textContent = chosen.name;
+          winnerDetails.textContent = `${chosen.company} (${chosen.role}) • ${chosen.email} • ${chosen.phone}`;
+          playSound('fanfare');
+          fireConfetti();
+        }
+      }, 100);
+    }
+
+    function alertModal(msg) {
+      const winnerBox = document.getElementById("raffle-winner-box");
+      winnerBox.classList.remove("hidden");
+      document.getElementById("raffle-winner-name").textContent = "Aviso do Estande";
+      document.getElementById("raffle-winner-details").textContent = msg;
+    }
+
+    function fireConfetti() {
+      if (typeof confetti !== 'function') return;
+      try {
+        confetti({
+          particleCount: 70,
+          spread: 65,
+          origin: { y: 0.6 },
+          colors: ['#F2617A', '#00A389', '#F3A712', '#003D4C', '#0B69A3']
+        });
+      } catch (e) {}
+    }
+
+    /* =========================================================
+     * 9. REVIEW MODAL (FULL ANSWERS IN ACTIVE LANGUAGE)
+     * ========================================================= */
+    function toggleReviewModal(show) {
+      playSound('click');
+      const modal = document.getElementById("modal-review");
+      if (show) {
+        modal.classList.remove("hidden");
+        renderReviewContent();
+      } else {
+        modal.classList.add("hidden");
+      }
+      lucide.createIcons();
+    }
+
+    function renderReviewContent() {
+      const container = document.getElementById("review-content");
+      const t = TRANSLATIONS[currentLang];
+      container.innerHTML = "";
+
+      QUIZ_QUESTIONS.forEach((q, idx) => {
+        const userAns = appState.userAnswers.find(a => a.questionId === q.id);
+        const isCorrect = userAns ? userAns.isCorrect : false;
+
+        const card = document.createElement("div");
+        card.className = "bg-tw-onyx border border-tw-borderDark rounded-xl p-4 space-y-2.5";
+
+        const correctOpt = q.options[currentLang].find(o => o.correct);
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-tw-mist/60">
+              ${t.questionPrefix} ${idx + 1} • ${q.category[currentLang]}
+            </span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1 ${
+              isCorrect ? 'bg-tw-jade/20 text-teal-300 border border-tw-jade/40' : 'bg-tw-pink/20 text-tw-pink border border-tw-pink/40'
+            }">
+              ${isCorrect ? (currentLang === 'pt' ? '✓ Correto' : '✓ Correct') : (currentLang === 'pt' ? '✗ Incorreto' : '✗ Missed')}
+            </span>
+          </div>
+
+          <h4 class="font-bitter text-sm sm:text-base font-bold text-white leading-snug">
+            ${q.question[currentLang]}
+          </h4>
+
+          <div class="text-xs text-tw-mist/85 bg-tw-darkSurface/90 p-2.5 rounded-lg border border-tw-borderDark/60">
+            <span class="text-tw-jade font-semibold">${t.keyTakeaway}</span> ${correctOpt ? correctOpt.text : ''}
+          </div>
+
+          <div class="text-xs text-teal-200/90 bg-tw-wave/30 border-l-2 border-tw-waveLight p-2.5 rounded-r-lg leading-relaxed">
+            <span class="font-bold text-white block mb-0.5">${t.lblTwExplanationTitle}:</span>
+            ${q.explanation[currentLang]}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function resetAppForNextPlayer() {
+      playSound('click');
+      document.getElementById("reg-form").reset();
+      document.getElementById("screen-results").classList.add("hidden");
+      document.getElementById("screen-registration").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleLogoClick() {
+      playSound('click');
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      applyLanguage();
+    });
+  </script>
+</body>
+</html>

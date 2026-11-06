@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+# Local Firebase config and any other env file: never commit (InfoSec secrets rule).
+.env
+.env.*
+!.env.example

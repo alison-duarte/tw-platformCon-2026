@@ -1,0 +1,19 @@
+.quiz { display: grid; gap: 1.1rem; }
+.quiz__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.quiz__count { font-weight: 600; margin-top: .2rem; }
+.quiz__score { text-align: right; }
+.quiz__score-label { display: block; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: rgba(226,232,240,.65); }
+.quiz__score strong { font: 700 1.5rem var(--font-head); color: var(--tw-turmeric); }
+.quiz__question { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+.steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: .4rem; }
+.step { height: 6px; border-radius: 3px; background: var(--tw-border); }
+.step--done { background: var(--tw-jade); }
+.step--now { background: var(--tw-flamingo); }
+.timer-row { display: flex; align-items: center; gap: .8rem; }
+.timer { flex: 1; }
+.timer__label { font-size: .8rem; color: rgba(226,232,240,.7); }
+.timer__track { height: 12px; border-radius: 6px; background: var(--tw-border); overflow: hidden; }
+.timer__bar { height: 100%; width: 100%; background: var(--tw-jade); border-radius: 6px; transition: background-color .3s; }
+.timer--urgent .timer__bar { background: var(--tw-flamingo); }
+.timer__value { min-width: 3ch; text-align: right; font: 700 1.1rem var(--font-head); }
+.options { display: grid; gap: .75rem; }

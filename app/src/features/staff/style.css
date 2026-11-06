@@ -1,0 +1,6 @@
+.table-wrap { overflow: auto; border: 1px solid var(--tw-border); border-radius: 12px; max-height: 45dvh; }
+.table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.table th, .table td { padding: .65rem .85rem; text-align: left; border-bottom: 1px solid var(--tw-border); white-space: nowrap; }
+.table th { position: sticky; top: 0; background: var(--tw-onyx); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: rgba(226,232,240,.7); }
+.table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.empty { padding: 2rem; text-align: center; color: rgba(226,232,240,.65); }

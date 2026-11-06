@@ -1,0 +1,18 @@
+.form { display: grid; gap: 1.25rem; }
+.hero { display: grid; gap: .75rem; }
+.badges { display: flex; flex-wrap: wrap; gap: .5rem; }
+.badge { padding: .4rem .8rem; border-radius: 999px; font-size: .8rem; font-weight: 600; background: rgba(0,61,76,.7); border: 1px solid var(--tw-wave-light); }
+.badge--swag { background: rgba(243,167,18,.15); border-color: var(--tw-turmeric); color: var(--tw-turmeric); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.field { display: grid; gap: .4rem; }
+.field label { font-size: .85rem; font-weight: 600; }
+.field input {
+  min-height: var(--tap); padding: .7rem 1rem;
+  font: 400 1rem var(--font-body); color: var(--tw-talc);
+  background: rgba(15,23,42,.8); border: 2px solid var(--tw-border); border-radius: 12px;
+}
+.field input::placeholder { color: rgba(226,232,240,.4); }
+.field input[aria-invalid='true'] { border-color: var(--tw-flamingo); }
+.field__error { min-height: 1.1em; color: var(--tw-flamingo); font-size: .8rem; }
+.check { display: flex; gap: .9rem; align-items: flex-start; min-height: var(--tap); font-size: .9rem; line-height: 1.45; cursor: pointer; }
+.check input { flex: none; width: 28px; height: 28px; margin: 0; accent-color: var(--tw-flamingo); }
