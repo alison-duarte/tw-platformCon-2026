@@ -91,7 +91,7 @@ A spec agora aceita 5 ou 7 perguntas: as 5 básicas e 2 avançadas, por último.
 - Sugestão padrão: enviar o deck ou os trechos que devem virar pergunta.
 - [Answer]: Deck recebido ("Engineering platform, a key to maximize engineering effectiveness", GLOBAL, © 2022 Thoughtworks). Redigi as duas perguntas avançadas a partir dele, em PT e EN, em `app/src/content/questions.js`:
   - **Q6** (`difficulty: advanced`): definição de DI platform (slide 30, citação de Evan Bottcher). Resposta correta: A.
-  - **Q7** (`difficulty: advanced`): levantamento de produtividade (slide 4, GitPrime 2017). Resposta correta: D ("esperar por outras pessoas", 41,1%).
+  - **Q7** (`difficulty: advanced`): blocos da plataforma (slides 11 a 12 e 24 a 25): publicar e descobrir APIs cabe ao Services Hub. Resposta correta: B. Versão anterior (levantamento de produtividade) substituída a pedido do dono do produto.
   - Ambas seguem a regra de letras (sequência C, A, D, B, C, A, D) e as explicações citam o deck.
   - **Pendente:** revisão do dono do produto (DoD 1.4b). Antes de publicar, confirmar que o deck pode servir de base para conteúdo público: vários slides estão marcados como "Confidential". Os dados do levantamento são de 2017 e o deck é de 2022.
 
