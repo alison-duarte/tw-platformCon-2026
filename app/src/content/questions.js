@@ -126,22 +126,22 @@ export const QUESTIONS = Object.freeze([
   },
   {
     id: 7,
-    correctIndex: 3,
+    correctIndex: 1,
     difficulty: 'advanced',
-    category: { pt: 'Produtividade dos desenvolvedores', en: 'Developer productivity' },
+    category: { pt: 'Blocos da plataforma', en: 'Platform building blocks' },
     question: {
-      pt: 'No levantamento de desenvolvedores citado pela Thoughtworks, qual atividade é a que mais drena o tempo dos times de produto (categoria "drena muito tempo")?',
-      en: 'In the developer survey cited by Thoughtworks, which activity drains the most time from product teams (the "drains a lot of time" category)?',
+      pt: 'Um time precisa publicar uma API para que outros times a descubram e a consumam, com SDKs e integração sob demanda. Em qual bloco do modelo da Thoughtworks essa capacidade se encaixa?',
+      en: 'A team needs to publish an API so other teams can discover and consume it, with SDKs and on-demand integration. Which block of the Thoughtworks model provides this capability?',
     },
     options: [
-      { pt: 'Reuniões em que eu fico quase calado', en: 'Meetings where I mostly remain silent' },
-      { pt: 'Lutar com ferramentas ruins', en: 'Struggling with bad tools' },
-      { pt: 'Gerenciar tickets, status e processos', en: 'Managing tickets, status and process' },
-      { pt: 'Esperar que outras pessoas façam alguma coisa', en: 'Waiting for other people to do stuff' },
+      { pt: 'Delivery Infra Hub', en: 'Delivery Infra Hub' },
+      { pt: 'Services Hub', en: 'Services Hub' },
+      { pt: 'Knowledge Hub', en: 'Knowledge Hub' },
+      { pt: 'Developer Experience Portal', en: 'Developer Experience Portal' },
     ],
     explanation: {
-      pt: 'No levantamento de 2017 da GitPrime, com 1.000 desenvolvedores nos EUA e no Reino Unido, 41,1% disseram que esperar por outras pessoas drena muito do tempo deles. Esse percentual supera o de reuniões (39,9%) e o de ferramentas ruins (35,1%). O deck liga essas esperas a processos baseados em chamados, que o autoatendimento elimina.',
-      en: 'In a 2017 GitPrime survey of 1,000 developers in the US and UK, cited by Thoughtworks, 41.1% said waiting for other people drains a lot of their time. That is higher than meetings (39.9%) and bad tools (35.1%). The deck links these waits to ticket-based processes that self-service removes.',
+      pt: 'O Services Hub publica e descobre APIs, eventos e modelos de dados (API gateway, event hub, data models), oferece SDKs e integração sob demanda. O Delivery Infra Hub cuida de infraestrutura e pipelines; o Knowledge Hub, de guias e catálogo de aplicações; e o Portal DevEx reúne os blocos em uma única interface.',
+      en: 'The Services Hub publishes and discovers APIs, events and data models (API gateway, event hub, data models), and offers API SDKs and on-demand integration. The Delivery Infra Hub handles infrastructure and pipelines, the Knowledge Hub handles guides and the application catalog, and the Developer Experience Portal brings the blocks together in one interface.',
     },
   },
 ]);
