@@ -3,4 +3,8 @@
 .table th, .table td { padding: .65rem .85rem; text-align: left; border-bottom: 1px solid var(--tw-border); white-space: nowrap; }
 .table th { position: sticky; top: 0; background: var(--tw-onyx); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: rgba(226,232,240,.7); }
 .table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.lb { margin: 1rem 0; }
+.lb__title { margin: 0 0 .25rem; font-size: 1.1rem; }
+.lb__actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+.file-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .empty { padding: 2rem; text-align: center; color: rgba(226,232,240,.65); }

@@ -24,6 +24,7 @@ Build a gamified, bilingual (PT/EN) web application for an iPad kiosk. The app i
 - Show a congratulatory message and confetti animation.
 - Display the exact text: "Ao finalizar o quiz, retire um brinde na mesa".
 - Do NOT include a live leaderboard or QR codes on this screen.
+- Placar (nome e pontuação, em revisão, não aprovado): ver `.claude/aidlc-docs/inception/02-requirements.md` seção 5. Até as perguntas Q17 a Q20 serem respondidas, o placar não existe, e esta regra continua valendo.
 
 ## 4. Staff Panel & CSV Export
 - Include a hidden/discrete button (e.g., a small gear icon or long-press logo) to open a Staff Dashboard.

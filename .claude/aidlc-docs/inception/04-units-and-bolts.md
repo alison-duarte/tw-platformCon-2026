@@ -11,6 +11,7 @@ No AI-DLC, a unidade de trabalho substitui o épico, e o bolt (ciclo curto e int
 | U1 | Acesso da equipe | Login gate, contas por hash, limite de tentativas, sessão que sobrevive ao recarregamento, "Sair" | Construída e testada localmente |
 | U2 | Dados no iPad | Repositório no `localStorage`, CSV, apagar tudo, aviso de falha ao salvar, sem nuvem | Construída e testada localmente (mesma base de antes, sem nuvem) |
 | U3 | Publicação e verificação no iPad | Aprovação da InfoSec (Q1), texto de consentimento (Q7), retenção (Q9), runbook, teste real em iPad | Pendente, depende de respostas |
+| U4 | Placar | Projeção pura de nome e pontuação, tela de placar (equipe e, se Q17 pedir, público), importação de dois CSV e mescla (Q18, decidida) | Construída localmente (Q17, Q18, Q18b e Q19 respondidas). Testes e `npm run verify` verdes. Não verificada no navegador nem no iPad |
 
 ## Ordem e bolts
 
@@ -19,6 +20,9 @@ No AI-DLC, a unidade de trabalho substitui o épico, e o bolt (ciclo curto e int
 | B1 | U1 e U2 | `npm run verify` verde; smoke test no Chrome com o build de produção: login, jogo sem novo login, sair, CSV |
 | B2 | U3 (documentos e InfoSec) | Aprovação de Q1 e Q2 registrada; texto de consentimento aprovado |
 | B3 | U3 (iPad) | Checklist de iPad preenchido por uma pessoa, com data e aparelho |
+| B4 | U4 (placar) | Respostas de Q17 a Q20 registradas; `npm run verify` verde; teste de projeção (sem e-mail nem telefone); smoke test no Chrome com sessão da equipe e com o placar vazio |
+
+B4 depende de B1. Não depende de B2 e B3 para o desenvolvimento, mas o placar público só vai ao ar com a publicação aprovada.
 
 Nenhum bolt entra em produção sem `npm run verify` verde e sem a aprovação da InfoSec para publicar.
 

@@ -60,3 +60,16 @@ Como participante, quero ver um aviso se o resultado não foi salvo, para procur
 **US-10 Preparar o aparelho**
 Como equipe, quero um roteiro curto para deixar o iPad pronto.
 - O roteiro cobre: URL fixa, Acesso Guiado, adicionar à Tela de Início, login da equipe, rodada de teste e CSV de teste.
+
+## Placar (em revisão, aguarda Q17 a Q20)
+
+**US-11 Ver o placar na equipe**
+Como membro da equipe, quero ver o placar com nome e pontuação, para acompanhar o estande sem abrir o CSV.
+- Dado que estou com sessão, quando abro o placar, então vejo nome e sobrenome e pontuação, do maior para o menor.
+- O placar não mostra e-mail, telefone, empresa nem cargo.
+- Empate: o resultado mais antigo fica acima.
+
+**US-12 Ver o placar no estande** (só se Q17 aprovar a exibição ao público)
+Como participante, quero ver quem está na frente, para me motivar a jogar.
+- Dado que o placar está liberado, quando abro a tela do placar, então vejo só nome e sobrenome e pontuação.
+- O consentimento precisa dizer que o nome aparece no placar (Q17). Sem isso, a história não entra.

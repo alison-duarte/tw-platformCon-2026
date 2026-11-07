@@ -1,6 +1,8 @@
 import { toCsv, csvFilename } from '../domain/csv.js';
 import { createParticipantRecord, validateRegistration } from '../domain/participant.js';
 import { hasUnexportedRecords } from '../domain/export-state.js';
+import { buildLeaderboard } from '../domain/leaderboard.js';
+import { parseLeaderboardCsv } from '../domain/leaderboard-import.js';
 import { advance, answerQuestion, startSession, summarize } from '../domain/quiz-session.js';
 import { QUESTION_TIME_SECONDS } from '../domain/scoring.js';
 import { createStore } from '../kernel/store.js';
@@ -29,6 +31,8 @@ export function createQuizApp({
   ids,
   getLanguage,
   exportLog = { get: () => null, set: () => {} },
+  leaderboardImport = memoryLeaderboardImport(),
+  teamEmails = [],
 }) {
   const store = createStore(idleState(access.isUnlocked() ? 'registration' : 'login'));
 
@@ -121,7 +125,28 @@ export function createQuizApp({
     return hasUnexportedRecords(await repository.list(), exportLog.get());
   }
 
-  const clearParticipants = () => repository.clear();
+  /** Deleting everything on this iPad also removes the imported leaderboard rows. */
+  async function clearParticipants() {
+    await repository.clear();
+    await leaderboardImport.clear();
+  }
+
+  /** Staff leaderboard: this iPad's results plus imported rows, one row per person, team excluded. */
+  async function leaderboard() {
+    const records = await repository.list();
+    const imported = await leaderboardImport.list();
+    return buildLeaderboard([...records, ...imported], { teamEmails });
+  }
+
+  /** Adds the rows of a CSV file to the leaderboard. Imports from several files add up. */
+  async function importLeaderboardCsv(text) {
+    const parsed = parseLeaderboardCsv(text);
+    if (!parsed.ok) return { ok: false, reason: parsed.reason };
+    if (parsed.entries.length > 0) await leaderboardImport.append(parsed.entries);
+    return { ok: true, added: parsed.entries.length, rejected: parsed.rejected };
+  }
+
+  const clearLeaderboardImport = () => leaderboardImport.clear();
 
   return {
     questions,
@@ -140,5 +165,17 @@ export function createQuizApp({
     exportCsv,
     hasUnexportedParticipants,
     clearParticipants,
+    leaderboard,
+    importLeaderboardCsv,
+    clearLeaderboardImport,
+  };
+}
+
+function memoryLeaderboardImport() {
+  let rows = [];
+  return {
+    async append(entries) { rows = [...rows, ...entries]; },
+    async list() { return [...rows]; },
+    async clear() { rows = []; },
   };
 }

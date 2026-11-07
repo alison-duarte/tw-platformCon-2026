@@ -21,7 +21,7 @@ Os itens do quiz (perguntas, pontuação, cronômetro, pop-up, resultado) **não
 | FR-11 | Painel da equipe (long-press de 1,5 s no logo) só abre com sessão válida | Sem sessão, o long-press não abre nada |
 | FR-12 | Painel lista participantes com pontuação e horário. Não mostra e-mail nem telefone | Regra 2.4 existente |
 | FR-13 | "Exportar CSV (.csv)" baixa **todos** os registros do `localStorage`, uma linha por participante | Mesmas colunas, ordem, BOM UTF-8 e CRLF de hoje |
-| FR-14 | "Apagar todos os dados" exige dois toques e apaga só o `localStorage` deste iPad | Regra 2.7 existente |
+| FR-14 | "Apagar todos os dados" exige dois toques e apaga só o `localStorage` deste iPad. Inclui as linhas importadas para o placar (chave própria) | Regra 2.7 existente; teste em `leaderboard-app.test.js` |
 | FR-15 | O tempo por pergunta continua em `QUESTION_TIME_SECONDS` | Nenhum valor fixo em tela ou texto |
 | FR-16 | O cadastro e o consentimento obrigatório continuam como hoje | Texto de consentimento só muda após revisão jurídica (Q7) |
 
@@ -58,3 +58,24 @@ Os itens do quiz (perguntas, pontuação, cronômetro, pop-up, resultado) **não
 | Teste real em iPad não feito | `DEFINITION_OF_DONE.md` 5.5 | Unidade U3 |
 | SAST/DAST não configurado | `DEFINITION_OF_DONE.md` 6.8 | Escopo a combinar com a InfoSec |
 | `quiz.md` e Definition of Done ainda citam nuvem em alguns pontos | `.claude/skills/` | Revisar na U3 |
+| `quiz.md` seção 3 e DoD 1.7 proíbem placar na tela de resultado | `.claude/skills/` | Mantidos. O placar é outra tela. Atualizar só se o placar for aprovado (seção 5) |
+
+## 5. Placar (em revisão, aguarda Q17 a Q20)
+
+> Estado: Q17 a Q19 e Q18b respondidas em 2026-11-07 (placar só para a equipe, com nome, sobrenome e pontuação). Construído localmente, aguarda revisão humana e teste no navegador e no iPad.
+
+O placar mostra quem jogou e a pontuação, ordenados. Os dados vêm dos resultados que já existem no `localStorage` deste iPad (ou de um CSV importado, se Q18 pedir). Nada muda na coleta: nenhum campo novo é pedido ao participante.
+
+| ID | Requisito | Critério de aceite |
+|----|-----------|--------------------|
+| FR-17 | Cada linha do placar mostra só **nome e sobrenome** e a **pontuação** | Teste de projeção: a saída não contém e-mail, telefone, empresa, cargo, precisão, horário nem idioma |
+| FR-18 | Ordem por pontuação, do maior para o menor. Empate: o resultado mais antigo fica primeiro | Teste de domínio com empates e com um único participante |
+| FR-19 | O nome exibido segue a regra de Q19 (primeiro e último nome, capitalização corrigida na tela). O dado guardado não muda | Teste com nome em minúsculas e nome com três partes (ex.: "nome exemplo sobrenome"): exibe primeiro e último nome com a capitalização corrigida; nome de uma palavra é exibido como está |
+| FR-20 | Pessoas da equipe saem do placar. Duplicados (mesmo primeiro e último nome e mesmo e-mail, normalizados) viram uma linha com a **maior pontuação**. O CSV não muda | Teste: duplicados mesclados com a maior pontuação; e-mail da equipe excluído; o CSV exportado continua com todas as linhas |
+| FR-23 | A equipe importa dois CSV no painel, e o app mescla com os resultados deste iPad (Q18) | Teste: cabeçalho inválido é recusado; linha inválida é contada e não entra; o arquivo de origem não é alterado |
+| FR-21 | O placar fica só no painel da equipe (sessão válida). Não aparece para o público (Q17) | Revisão de código: o placar só é montado pelo painel, e o painel só abre com sessão |
+| FR-22 | O placar não aparece na tela de resultado do participante (`quiz.md` seção 3) | Teste de conteúdo do resultado, já existente |
+| NFR-12 | Privacidade | Nome e pontuação são o mínimo. Nada do placar sai do aparelho. Sem serviço de placar em nuvem |
+| NFR-13 | Bilíngue | Rótulos do placar em `messages.pt.js` e `messages.en.js` |
+
+Fora deste item: placar entre vários iPads ao vivo (exigiria sincronização, que está fora do escopo).
