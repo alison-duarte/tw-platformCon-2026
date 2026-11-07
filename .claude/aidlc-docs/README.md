@@ -18,6 +18,7 @@ Site estático (SPA) com dados só no `localStorage` do iPad, login da equipe an
 | 4 | [inception/04-units-and-bolts.md](inception/04-units-and-bolts.md) | Em que ordem construir, em quais pedaços? |
 | 5 | [inception/05-architecture.md](inception/05-architecture.md) | Como a SPA, o login e o `localStorage` se relacionam? |
 | 6 | [inception/06-open-questions.md](inception/06-open-questions.md) | O que precisa de decisão ou resposta antes de publicar? |
+| 7 | [inception/07-advanced-content.md](inception/07-advanced-content.md) | De qual slide do deck vem cada pergunta avançada, e o que vai além do deck? |
 | - | [audit.md](audit.md) | Quem gerou o quê, quando, e quem aprovou. |
 
 ## Portões (gates)

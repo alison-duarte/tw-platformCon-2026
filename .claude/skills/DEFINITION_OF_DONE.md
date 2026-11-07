@@ -13,7 +13,7 @@ Sources: `.claude/skills/quiz.md` (product spec), `design-alltw-thoughtworks-bra
 | 1.3 | The quiz has 5 or 7 questions (7 = 5 basic plus 2 advanced, the advanced ones last), 30 seconds each (one constant, `QUESTION_TIME_SECONDS`); a timeout counts as incorrect | `content.test.js`, `quiz-app.test.js` |
 | 1.4 | Correct answers spread over A to D: no letter correct more than twice, no two consecutive questions with the same letter | `content.test.js` |
 | 1.4a | Every question has a `difficulty` of `basic` or `advanced`; advanced questions come last, and there are exactly 0 or 2 of them | `content.test.js` |
-| 1.4b | Advanced questions come from the Thoughtworks deck, and their explanation does not add claims beyond the deck | content review by the product owner |
+| 1.4b | Each advanced question has a source entry (deck slides, claims beyond the deck) in `aidlc-docs/inception/07-advanced-content.md`; the product owner approves claims beyond the deck | `advanced-content.test.js`, product owner review |
 | 1.5 | Feedback with the Thoughtworks insight shows after every answer, right or wrong | manual run |
 | 1.5a | A pop-up shows a check (right), an X (wrong) or a clock (time expired); it never blocks taps, removes itself after about 1.4s, and stays visible but static with reduced motion | manual run |
 | 1.6 | Score = 1,000 + 50 per second left + 150 per streak step; tiers switch at 6,300 and 11,200 (scaled for 7 questions) | `scoring.test.js`, `quiz-session.test.js` |
