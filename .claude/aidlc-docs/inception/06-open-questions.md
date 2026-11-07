@@ -90,9 +90,9 @@ Quem revisa cada bolt antes de ir para o `main`? Eu sugiro o `code-reviewer` com
 A spec agora aceita 5 ou 7 perguntas: as 5 básicas e 2 avançadas, por último. O repositório não tem o deck, então eu não escrevi as perguntas para não inventar a posição da Thoughtworks. Envie o deck (ou os trechos) e eu redijo as duas em PT e EN, com explicação baseada no deck, para sua revisão.
 - Sugestão padrão: enviar o deck ou os trechos que devem virar pergunta.
 - [Answer]: Deck recebido ("Engineering platform, a key to maximize engineering effectiveness", GLOBAL, © 2022 Thoughtworks). Redigi as duas perguntas avançadas a partir dele, em PT e EN, em `app/src/content/questions.js`:
-  - **Q6** (`difficulty: advanced`): definição de DI platform (slide 30, citação de Evan Bottcher). Resposta correta: A.
-  - **Q7** (`difficulty: advanced`): blocos da plataforma (slides 11 a 12 e 24 a 25): publicar e descobrir APIs cabe ao Services Hub. Resposta correta: B. Versão anterior (levantamento de produtividade) substituída a pedido do dono do produto.
-  - Ambas seguem a regra de letras (sequência C, A, D, B, C, A, D) e as explicações citam o deck.
+  - **Q6** (`difficulty: advanced`): divisão de responsabilidades (slide 35). Resposta correta: B. Fontes em `07-advanced-content.md`.
+  - **Q7** (`difficulty: advanced`): governança no ponto de mudança (slides 60, 77 e 29). Resposta correta: D. Fontes em `07-advanced-content.md`. Termo "admission controllers" fora do deck, mantido a pedido do dono do produto.
+  - Ambas seguem a regra de letras (sequência C, A, D, B, C, B, D).
   - **Pendente:** revisão do dono do produto (DoD 1.4b). Antes de publicar, confirmar que o deck pode servir de base para conteúdo público: vários slides estão marcados como "Confidential". Os dados do levantamento são de 2017 e o deck é de 2022.
 
 **Q16. Pontuação com 7 perguntas**

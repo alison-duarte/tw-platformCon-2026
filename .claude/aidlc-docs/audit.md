@@ -13,6 +13,7 @@
 | 2026-11-06 | Decisão do dono do produto | Claude (Haiku 5.5), a pedido de Alison Duarte | Revisão jurídica do consentimento dispensada; anonimização dos dados não exigida neste momento. Atualizados CLAUDE.md, DoD 6.6 e skill event-operations | Pendente | Texto de consentimento aprovado pelo dono do produto. Reavaliar anonimização se o escopo mudar |
 | 2026-11-06 | Data do evento | Claude (Haiku 5.5), a pedido de Alison Duarte | Evento em 07/11/2026; prazo de apagamento 09/11/2026. Q14 desconsiderada. Runbook atualizado | Pendente | Publicação e testes no iPad ainda não confirmados; ver prazo |
 | 2026-11-06 | Conteúdo do quiz | Claude (Haiku 5.5), a pedido de Alison Duarte | Pergunta avançada Q7 reescrita sobre os blocos da plataforma (Delivery Infra Hub, Services Hub, Knowledge Hub, Developer Experience Portal), resposta B | Pendente | Verify verde (67 testes). Revisão do dono do produto pendente |
+| 2026-11-06 | Conteúdo do quiz | Claude (Haiku 5.5), a pedido de Alison Duarte | Perguntas avançadas Q6 (divisão de responsabilidades, B) e Q7 (governança no ponto de mudança, D) substituem as anteriores. Novo `07-advanced-content.md` com fontes por slide. Teste `advanced-content.test.js`. Quiz, DoD 1.4b e índice do AI-DLC atualizados | Pendente | Verify verde (68 testes). Ambiguidade da opção C de Q6 e termo "admission controllers" em Q7 pendentes de decisão |
 
 ## Regras de registro
 
