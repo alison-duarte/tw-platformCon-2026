@@ -88,6 +88,27 @@ Chave `tw-platform-quiz:v1:session`: `{ "label": "Equipe 1" }` quando a equipe e
 - Os e-mails das contas ficam visíveis no bundle público (Q5).
 - A CSP continua estrita: `connect-src 'self'`, sem script remoto.
 
+## Placar (U4, em revisão)
+
+Sem armazenamento novo: o placar lê os resultados que já existem e mostra só uma projeção.
+
+| Componente | Camada | Papel |
+|------------|--------|-------|
+| `domain/leaderboard.js` | domain | Função pura: recebe os participantes e devolve `[{ rank, displayName, score }]`. Aplica a regra de nome (Q19), a ordem e o desempate (FR-18), e exclui testes e duplicados (Q20). Não importa pacotes nem DOM |
+| `application/create-quiz-app.js` | application | Novo caso de uso `leaderboard()`: lê os participantes pela porta de repositório existente e devolve só a projeção |
+| `features/leaderboard/` | features | Tela do placar. Recebe `ctx` e `props`, sem acessar o repositório diretamente |
+| `composition/screens.js` | composition | Registro do novo item no registro lazy, com a condição de exibição definida por Q17 |
+| `content/messages.*.js` | content | Rótulos PT e EN |
+
+**Regra de isolamento:** a projeção é o único dado que a tela recebe. E-mail e telefone nunca entram no objeto da tela, então não há como exibi-los por engano. O teste de domínio verifica isso.
+
+**Fonte dos dados (Q18, decidida: opção B):**
+- A equipe importa os dois CSV no painel. O app lê, valida o cabeçalho (`Nome`, `Email`, `Pontuacao`, `Data_Hora`) e mescla com os resultados deste iPad. Linhas inválidas são contadas e descartadas.
+- A mescla (equipe fora, duplicados pela maior pontuação) é uma função pura em `domain/leaderboard.js`, testada com dados fictícios.
+- Pendente (Q18b): guardar o placar importado no `localStorage` ou só em memória.
+- Os valores vindos de CSV são texto. Nunca vão para `innerHTML`, e a leitura trata fórmulas (`=`, `+`, `-`, `@`) como texto.
+- Descartada: lista fixa no código, gerada a partir de planilhas. Publicaria nomes de participantes no site público, contra a regra 5 do `CLAUDE.md` e contra a aprovação de Q1.
+
 ## Orçamento e desempenho
 
 - A entrada do bundle inclui o login (pequeno) e continua dentro de 40 kB gzip.

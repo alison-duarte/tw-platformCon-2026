@@ -8,6 +8,7 @@ import { createConfettiEffect } from '../infrastructure/confetti-effect.js';
 import { createFileDownloader } from '../infrastructure/file-downloader.js';
 import { createLocalAccessStore } from '../infrastructure/local-access-store.js';
 import { createLocalExportLog } from '../infrastructure/local-export-log.js';
+import { createLocalLeaderboardImport } from '../infrastructure/local-leaderboard-import.js';
 import { createLocalStorageParticipantRepository } from '../infrastructure/local-storage-participant-repository.js';
 import { verifyPassword } from '../infrastructure/password-hash.js';
 import { systemClock, uuidGenerator } from '../infrastructure/system.js';
@@ -30,6 +31,8 @@ export function createContext() {
     access,
     downloader: createFileDownloader(),
     exportLog: createLocalExportLog(globalThis.localStorage),
+    leaderboardImport: createLocalLeaderboardImport(globalThis.localStorage),
+    teamEmails: STAFF_ACCOUNTS.map((account) => account.email),
     clock: systemClock,
     ids: uuidGenerator,
     getLanguage: () => i18n.lang,

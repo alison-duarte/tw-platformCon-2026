@@ -28,7 +28,8 @@ O quiz precisa rodar em um iPad de estande, em uma página pública, sem expor o
 
 - Servidor próprio, banco de dados em nuvem e sincronização entre aparelhos.
 - Cadastro público de equipe, perfis com níveis de permissão, recuperação de senha.
-- Painel público com ranking ou QR code (já excluído pelo `quiz.md`).
+- QR code, e placar no resultado do participante (excluídos pelo `quiz.md`, seção 3).
+- Placar com nome e pontuação: **em revisão** (seção 5 de `02-requirements.md`, Q17 a Q20). Não é escopo aprovado até o dono do produto responder.
 - Expiração de sessão por inatividade (decisão Q8).
 - Proteção de segurança real para o login. Por ser um site público, o login só barra o uso casual (ver Q2).
 
@@ -36,6 +37,7 @@ O quiz precisa rodar em um iPad de estande, em uma página pública, sem expor o
 
 - **Site público:** o GitHub Pages é público. A publicação depende da aprovação da InfoSec (Q1).
 - **Dados pessoais no navegador:** nome, e-mail e telefone ficam no `localStorage` do iPad. Isso precisa aparecer no consentimento (Q7) e na retenção (Q9).
+- **Placar com nomes:** mostrar nome a quem está no estande é um uso dos dados além do sorteio, que é a única finalidade do texto de consentimento aprovado (Q7). Depende de Q17 antes de qualquer código.
 - **Dispositivo:** iPad com Safari, em retrato e paisagem, em modo quiosque.
 - **Sem framework de interface** e sem dependência nova sem justificativa escrita.
 

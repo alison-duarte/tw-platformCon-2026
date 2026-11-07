@@ -100,3 +100,52 @@ As faixas de pontuação (4.500 e 8.000 pontos) foram pensadas para 5 perguntas.
 - Sugestão padrão: manter as faixas. Opções: (a) manter; (b) escalar pela proporção, para 6.300 e 11.200 pontos.
 - [Answer]: escalar pela proporção
   - Registro: implementado. Faixas em 6.300 (herói) e 11.200 (visionário), com testes atualizados.
+
+---
+
+## Placar (pedido em 2026-11-07, bloqueia a U4)
+
+> Estas perguntas bloqueiam a construção do placar. Nada de código do placar até as respostas de Q17 e Q18.
+
+**Q17. Quem vê o placar, e onde? (bloqueador: nome e consentimento)**
+O texto de consentimento aprovado (Q7) diz que os dados são usados "somente para participar do quiz e para o sorteio do brinde". Mostrar nomes num placar visível a quem está no estande é outra finalidade. Além disso, a intenção diz "sem expor os dados dos participantes a terceiros".
+- Sugestão padrão: **placar só para a equipe**, no painel, com sessão. Não muda o consentimento e não expõe nomes ao público.
+- [Answer]: Placar só para a equipe, no painel, com nome, sobrenome e pontuação (opção a).
+  - Registro: opção (a). Não há exibição ao público, então o texto de consentimento não muda.
+- Opções:
+  - (a) Só equipe, no painel (padrão).
+  - (b) Público, no iPad, com nome e pontuação. Exige novo texto de consentimento em PT e EN, aprovado pelo dono do produto e registrado (Q7), e a aprovação de InfoSec do uso (Q1).
+  - (c) Público, mas só pontuação, sem nome. Não conflita com o consentimento.
+- [Answer]:
+
+**Q18. De onde vêm os dados do placar? (bloqueador: fonte)**
+As duas planilhas enviadas são de 07/11/2026 e parecem exportações do iPad. Se foram geradas em **dois iPads**, um placar só com o `localStorage` deste aparelho não mostra os dois conjuntos. O placar não pode sincronizar entre aparelhos (fora de escopo).
+- Sugestão padrão: opção (a), só o `localStorage` deste iPad.
+- Opções:
+  - (a) Só os dados deste iPad.
+  - (b) Importar CSVs exportados no painel (a equipe escolhe o arquivo). Precisa de validação de formato no app.
+  - (c) Lista fixa no código, gerada das planilhas. **Não recomendado e não será feito:** publicaria nomes de participantes no site público, contra a regra 5 do `CLAUDE.md` e contra a aprovação de Q1.
+- Confirme também quantos iPads coletaram os dados do evento.
+- [Answer]: Mesclar as duas planilhas (ambas de 07/11/2026).
+  - Registro: opção (b). A equipe importa os dois CSV no painel do iPad, e o app mescla com os resultados que já estão neste aparelho. Os dados reais não entram no repositório.
+  - Q18b [Answer]: Sim, guardar no `localStorage`, em chave própria, sem alterar o CSV de origem.
+  - Registro: chave `tw-platform-quiz:v1:leaderboard-import`, separada de `participants`. Os resultados do próprio iPad continuam em `participants`.
+
+**Q19. Como mostrar "Nome/Sobrenome"?**
+O campo do cadastro é "Nome completo". Os nomes digitados têm problemas de capitalização e de digitação, e há nomes de uma palavra e nomes com três ou mais partes.
+- Sugestão padrão: **primeiro e último nome**, com capitalização corrigida na tela. Nome de uma palavra aparece como está. O dado guardado não muda.
+- Opções: (a) primeiro e último nome (padrão); (b) nome completo, como digitado; (c) primeiro nome e inicial do sobrenome.
+- [Answer]: Nome e sobrenome.
+  - Registro: opção (a), primeiro e último nome, com capitalização corrigida na tela (FR-19).
+
+**Q20. Duplicados, registros de teste e empates**
+Nas planilhas, uma mesma pessoa aparece mais de uma vez, com pontuações diferentes. Há também linhas com o nome da própria equipe, com horário anterior ao início do evento, que parecem testes. Nada será excluído sem confirmação.
+- Sugestão padrão:
+  - Uma linha por pessoa, com a **melhor pontuação**. A pessoa é identificada pelo e-mail normalizado (minúsculas, sem espaços).
+  - Empate: o resultado mais antigo fica acima (FR-18).
+  - Testes: a equipe informa quais registros são de teste. O placar os exclui, e o CSV continua com todas as linhas (FR-20).
+- Opções: (a) padrão; (b) uma linha por resultado, sem agrupar; (c) excluir por horário anterior à abertura do evento (precisa do horário de abertura).
+- [Answer]: Mesclar e excluir a equipe. Mesmo nome, mesmo sobrenome e mesmo e-mail são a mesma pessoa, e fica a maior pontuação.
+  - Registro: chave de duplicado = primeiro e último nome + e-mail, normalizados (minúsculas, sem acento, sem espaços extras). Empate de pontuação: fica o resultado mais antigo. Nomes digitados com grafia diferente não se mesclam, e isso é aceito.
+  - Equipe excluída: e-mail de uma das contas da equipe (Q5) ou qualquer e-mail do domínio `thoughtworks.com`. Padrão a confirmar: o domínio inteiro, que inclui a conta de Alison Duarte.
+  - Não aplicado: exclusão por horário (opção c). Os registros de teste entram na mesclagem, a menos que tenham e-mail da equipe.

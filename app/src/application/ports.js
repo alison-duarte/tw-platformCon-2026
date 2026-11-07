@@ -7,6 +7,11 @@
  * @property {() => Promise<object[]>} list
  * @property {() => Promise<void>} clear
  *
+ * @typedef {object} LeaderboardImport      Rows imported from CSV for the staff leaderboard (this iPad only).
+ * @property {(entries: object[]) => Promise<void>} append
+ * @property {() => Promise<object[]>} list
+ * @property {() => Promise<void>} clear
+ *
  * @typedef {object} FileDownloader
  * @property {(file: {filename: string, content: string, mime: string}) => void} download
  *
